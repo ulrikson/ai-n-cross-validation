@@ -5,8 +5,8 @@ from base_client import LLMClient
 
 
 class GeminiClient(LLMClient):
-    INPUT_TOKEN_PRICE = 0.1 / 1000000  # $0.10 per million input tokens
-    OUTPUT_TOKEN_PRICE = 0.4 / 1000000  # $0.40 per million output tokens
+    INPUT_TOKEN_PRICE_CENTS = (0.1 / 1000000) * 100  # $0.10 per million input tokens
+    OUTPUT_TOKEN_PRICE_CENTS = (0.4 / 1000000) * 100  # $0.40 per million output tokens
 
     def __init__(self):
         genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -22,10 +22,10 @@ class GeminiClient(LLMClient):
         input_tokens = response.usage_metadata.prompt_token_count
         output_tokens = response.usage_metadata.candidates_token_count
 
-        input_cost = input_tokens * GeminiClient.INPUT_TOKEN_PRICE
-        output_cost = output_tokens * GeminiClient.OUTPUT_TOKEN_PRICE
+        input_cost = input_tokens * GeminiClient.INPUT_TOKEN_PRICE_CENTS
+        output_cost = output_tokens * GeminiClient.OUTPUT_TOKEN_PRICE_CENTS
         total_cost = input_cost + output_cost
 
         print(
-            f"Gemini cost: ${input_cost:.6f} for {input_tokens} input tokens, ${output_cost:.6f} for {output_tokens} output tokens, ${total_cost:.6f} total"
+            f"Gemini cost (cents): {total_cost:.6f} total ({input_tokens} input tokens + {output_tokens} output tokens)"
         )

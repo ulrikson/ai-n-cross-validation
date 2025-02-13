@@ -21,8 +21,6 @@ def main():
         final_result = results[-1]
         print_markdown(final_result.answer)
 
-        print("\nAll responses have been saved to the outputs directory.")
-
     except Exception as e:
         print(f"Error: {str(e)}")
         raise SystemExit(1)
