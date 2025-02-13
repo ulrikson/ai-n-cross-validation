@@ -12,7 +12,7 @@ class LLMResponse:
 class LLMClient(ABC):
     _VALIDATION_PROMPT = (
         'I asked this question to my friend: "{original_question}" and received this answer: "{previous_answer}". '
-        "Please fact check the answer and return the correct answer. "
+        "Please fact check the answer, clarify it if needed and return the correct answer. "
         "Please return your answer in markdown format."
         "Use the same language as the question."
     )
@@ -21,7 +21,9 @@ class LLMClient(ABC):
     def ask_question(self, question: str) -> LLMResponse:
         pass
 
-    def validate_answer(self, original_question: str, previous_answer: str) -> LLMResponse:
+    def validate_answer(
+        self, original_question: str, previous_answer: str
+    ) -> LLMResponse:
         prompt = self._VALIDATION_PROMPT.format(
             original_question=original_question, previous_answer=previous_answer
         )
