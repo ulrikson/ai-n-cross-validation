@@ -2,6 +2,7 @@ import os
 from openai import OpenAI
 from base_client import LLMClient, LLMResponse
 from typing import Any
+from dotenv import load_dotenv
 
 
 class OpenAIClient(LLMClient):
@@ -33,3 +34,10 @@ class OpenAIClient(LLMClient):
         total_cost = input_cost + output_cost
 
         return total_cost
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    client = OpenAIClient()
+    response = client.ask_question("What is the capital of France?")
+    print(response.text)

@@ -2,6 +2,7 @@ import os
 import anthropic
 from base_client import LLMClient, LLMResponse
 from typing import Any
+from dotenv import load_dotenv
 
 
 class ClaudeClient(LLMClient):
@@ -16,8 +17,8 @@ class ClaudeClient(LLMClient):
         response = self.client.messages.create(
             model="claude-3-5-sonnet-latest",
             max_tokens=1024,
+            system="You are a research assistant.",
             messages=[
-                {"role": "system", "content": "You are a research assistant."},
                 {"role": "user", "content": question},
             ],
         )
@@ -32,3 +33,10 @@ class ClaudeClient(LLMClient):
         total_cost = input_cost + output_cost
 
         return total_cost
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    client = ClaudeClient()
+    response = client.ask_question("What is the capital of France?")
+    print(response.text)
