@@ -2,10 +2,19 @@ from abc import ABC, abstractmethod
 
 
 class LLMClient(ABC):
+    _VALIDATION_PROMPT = (
+        'I asked this question to my friend: "{original_question}" and received this answer: "{previous_answer}". '
+        "Please read the question, then create your new answer, then finally compare this new answer with the previous answer. "
+        "If the new answer is different, please explain why it is different."
+    )
+
     @abstractmethod
     def ask_question(self, question: str) -> str:
         pass
 
-    @abstractmethod
     def validate_answer(self, original_question: str, previous_answer: str) -> str:
-        pass 
+        print(f"Validating using {self.__class__.__name__}...")
+        prompt = self._VALIDATION_PROMPT.format(
+            original_question=original_question, previous_answer=previous_answer
+        )
+        return self.ask_question(prompt)

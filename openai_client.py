@@ -8,6 +8,7 @@ class OpenAIClient(LLMClient):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     def ask_question(self, question: str) -> str:
+        print(f"Asking OpenAI...")
         completion = self.client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -16,13 +17,6 @@ class OpenAIClient(LLMClient):
             ],
         )
         return completion.choices[0].message.content
-
-    def validate_answer(self, original_question: str, previous_answer: str) -> str:
-        prompt = (
-            f'I asked this question: "{original_question}" and received this answer: "{previous_answer}".'
-            " Please fact check and verify this answer."
-        )
-        return self.ask_question(prompt)
 
 
 if __name__ == "__main__":

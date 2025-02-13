@@ -9,9 +9,6 @@ class GeminiClient(LLMClient):
         self.model = genai.GenerativeModel("gemini-1.5-flash")
 
     def ask_question(self, question: str) -> str:
+        print(f"Asking Gemini...")
         response = self.model.generate_content(question)
         return response.text
-
-    def validate_answer(self, original_question: str, previous_answer: str) -> str:
-        prompt = f'I asked this question: "{original_question}" and received this answer: "{previous_answer}". Please fact check and verify this answer.'
-        return self.ask_question(prompt)
