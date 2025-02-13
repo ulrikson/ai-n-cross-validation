@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 
 class LLMClient(ABC):
@@ -19,3 +20,7 @@ class LLMClient(ABC):
             original_question=original_question, previous_answer=previous_answer
         )
         return self.ask_question(prompt)
+
+    @abstractmethod
+    def print_costs(self, response: Any):
+        pass
