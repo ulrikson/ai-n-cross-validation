@@ -2,6 +2,7 @@ import os
 from typing import Any
 import google.generativeai as genai
 from base_client import LLMClient, LLMResponse
+from dotenv import load_dotenv
 
 
 class GeminiClient(LLMClient):
@@ -26,3 +27,11 @@ class GeminiClient(LLMClient):
         total_cost = input_cost + output_cost
 
         return total_cost
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    client = GeminiClient()
+    response = client.ask_question("What is the capital of France?")
+    print(response.text)
+    print(client.calculate_costs(response.raw_response))
