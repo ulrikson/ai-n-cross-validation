@@ -12,8 +12,7 @@ class LLMResponse:
 class LLMClient(ABC):
     _VALIDATION_PROMPT = (
         'I asked this question to my friend: "{original_question}" and received this answer: "{previous_answer}". '
-        "Please read the question, then create your new answer, then finally compare this new answer with the previous answer. "
-        "If the new answer is different, please explain why it is different."
+        "Please fact check the answer and return the correct answer. "
         "Please return your answer in markdown format."
         "Use the same language as the question."
     )
