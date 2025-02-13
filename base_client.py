@@ -13,6 +13,7 @@ class LLMClient(ABC):
     _VALIDATION_PROMPT = (
         'I asked this question to my friend: "{original_question}" and received this answer: "{previous_answer}". '
         "Please fact check the answer and return the correct answer. "
+        "Do not return your analysis, just the new, fact checked, answer."
         "Please return your answer in markdown format."
         "Use the same language as the question."
     )
