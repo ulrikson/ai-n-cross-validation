@@ -3,3 +3,4 @@ openai
 google-generativeai
 urllib3==1.26.15
 rich
+anthropic
