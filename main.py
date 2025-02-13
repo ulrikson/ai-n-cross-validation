@@ -2,12 +2,13 @@ from dotenv import load_dotenv
 from openai_client import OpenAIClient
 from gemini_client import GeminiClient
 from cross_validator import CrossValidator
+from markdown_printer import print_markdown
 
 load_dotenv()
 
 
 def main():
-    """Cross-validate an answer across multiple LLMs."""
+    """Cross-validate an answer across multiple LLMs and print markdown output."""
     try:
         question = input("Enter your question: ")
         clients = [OpenAIClient(), GeminiClient()]
@@ -17,8 +18,7 @@ def main():
 
         # Display the final answer (from the last LLM)
         final_result = results[-1]
-        print("\nFinal Validated Answer:")
-        print(final_result.answer)
+        print_markdown(final_result.answer)
 
         print("\nAll responses have been saved to the outputs directory.")
 
