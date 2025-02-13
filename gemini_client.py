@@ -1,6 +1,7 @@
 import os
 from typing import Any
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from base_client import LLMClient, LLMResponse
 from dotenv import load_dotenv
 
@@ -10,12 +11,17 @@ class GeminiClient(LLMClient):
     OUTPUT_TOKEN_PRICE = 0.4 / 1000000  # $0.40 per million output tokens
 
     def __init__(self):
-        genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-        self.model = genai.GenerativeModel("gemini-2.0-flash")
+        self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
     def ask_question(self, question: str) -> LLMResponse:
         print(f"Asking Gemini...")
-        response = self.model.generate_content(question)
+        response = self.client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=question,
+            config=types.GenerateContentConfig(
+                system_instruction="You are a research assistant."
+            ),
+        )
         return LLMResponse(text=response.text, raw_response=response)
 
     def calculate_costs(self, response: Any) -> float:

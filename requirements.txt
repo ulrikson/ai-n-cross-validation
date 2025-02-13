@@ -1,6 +1,6 @@
 python-dotenv
 openai
-google-generativeai
+google-genai
 urllib3==1.26.15
 rich
 anthropic
