@@ -21,6 +21,10 @@ def main():
         final_result = results[-1]
         print_markdown(final_result.answer)
 
+        # Calculate and display total costs
+        total_cost = sum(result.cost for result in results)
+        print(f"\nTotal cost for all AI models: ${total_cost:.4f}")
+
     except Exception as e:
         print(f"Error: {str(e)}")
         raise SystemExit(1)

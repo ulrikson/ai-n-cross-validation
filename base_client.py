@@ -1,5 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Any
+from dataclasses import dataclass
+
+
+@dataclass
+class LLMResponse:
+    text: str
+    raw_response: Any
 
 
 class LLMClient(ABC):
@@ -12,15 +19,15 @@ class LLMClient(ABC):
     )
 
     @abstractmethod
-    def ask_question(self, question: str) -> str:
+    def ask_question(self, question: str) -> LLMResponse:
         pass
 
-    def validate_answer(self, original_question: str, previous_answer: str) -> str:
+    def validate_answer(self, original_question: str, previous_answer: str) -> LLMResponse:
         prompt = self._VALIDATION_PROMPT.format(
             original_question=original_question, previous_answer=previous_answer
         )
         return self.ask_question(prompt)
 
     @abstractmethod
-    def print_costs(self, response: Any):
+    def calculate_costs(self, response: Any) -> float:
         pass

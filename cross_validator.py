@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from typing import List
-from base_client import LLMClient
+from base_client import LLMClient, LLMResponse
 from validation_result import ValidationResult
 
 
@@ -30,15 +30,19 @@ class CrossValidator:
 
         for i, client in enumerate(self.clients):
             if i == 0:
-                answer = client.ask_question(question)
+                response = client.ask_question(question)
             else:
-                answer = client.validate_answer(question, previous_answer)
+                response = client.validate_answer(question, previous_answer)
 
+            cost = client.calculate_costs(response.raw_response)
             result = ValidationResult(
-                question=question, model_name=client.__class__.__name__, answer=answer
+                question=question,
+                model_name=client.__class__.__name__,
+                answer=response.text,
+                cost=cost,
             )
             results.append(result)
-            previous_answer = answer
+            previous_answer = response.text
 
         self._save_to_file(results)
         return results
