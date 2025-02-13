@@ -27,7 +27,9 @@ def main():
         # Calculate total costs
         total_cost = sum(result.cost for result in results)
         sek_amount = CurrencyConverter.convert(total_cost, CURRENCY)
-        print(f"Total cost: {sek_amount:.3f} {CURRENCY}")
+
+        print_markdown("---")
+        print_markdown(f"**Total cost**: {sek_amount:.3f} {CURRENCY}")
 
     except Exception as e:
         print(f"Error: {str(e)}")

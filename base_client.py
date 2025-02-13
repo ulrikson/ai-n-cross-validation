@@ -12,7 +12,7 @@ class LLMResponse:
 class LLMClient(ABC):
     _VALIDATION_PROMPT = (
         'I asked this question to my friend: "{original_question}" and received this answer: "{previous_answer}". '
-        "Please fact check the answer, clarify it if needed and return the correct answer. "
+        "Please fact check the answer and return the correct answer. "
         "Please return your answer in markdown format."
         "Use the same language as the question."
     )
