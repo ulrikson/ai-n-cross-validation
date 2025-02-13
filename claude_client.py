@@ -16,7 +16,10 @@ class ClaudeClient(LLMClient):
         response = self.client.messages.create(
             model="claude-3-5-sonnet-latest",
             max_tokens=1024,
-            messages=[{"role": "user", "content": question}],
+            messages=[
+                {"role": "system", "content": "You are a research assistant."},
+                {"role": "user", "content": question},
+            ],
         )
         return LLMResponse(text=response.content[0].text, raw_response=response)
 

@@ -16,7 +16,7 @@ class OpenAIClient(LLMClient):
         completion = self.client.chat.completions.create(
             model="gpt-4o",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "You are a research assistant."},
                 {"role": "user", "content": question},
             ],
         )
