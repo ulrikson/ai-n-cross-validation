@@ -30,5 +30,5 @@ class ClaudeClient(LLMClient):
         total_cost = input_cost + output_cost
 
         print(
-            f"Claude cost (cents): {total_cost:.6f} total ({input_tokens} input tokens + {output_tokens} output tokens)"
+            f"Claude cost (cents): {total_cost:.3f} total ({input_tokens} input tokens + {output_tokens} output tokens)"
         )
