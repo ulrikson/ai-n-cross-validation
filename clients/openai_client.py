@@ -3,7 +3,7 @@ from openai import OpenAI
 from .base_client import LLMClient, LLMResponse, PromptType
 from typing import Any
 from dotenv import load_dotenv
-from pricing_config import get_pricing
+from config.pricing_config import get_pricing
 
 
 class OpenAIClient(LLMClient):

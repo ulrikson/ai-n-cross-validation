@@ -3,7 +3,7 @@ import anthropic
 from .base_client import LLMClient, LLMResponse, PromptType
 from typing import Any
 from dotenv import load_dotenv
-from pricing_config import get_pricing
+from config.pricing_config import get_pricing
 
 
 class ClaudeClient(LLMClient):
@@ -41,3 +41,4 @@ if __name__ == "__main__":
     client = ClaudeClient()
     response = client.ask_question("What is the capital of France?")
     print(response.text)
+    print(client.calculate_costs(response.raw_response))

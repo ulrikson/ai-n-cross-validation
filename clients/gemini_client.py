@@ -4,7 +4,7 @@ from google import genai
 from google.genai import types
 from .base_client import LLMClient, LLMResponse, PromptType
 from dotenv import load_dotenv
-from pricing_config import get_pricing
+from config.pricing_config import get_pricing
 
 
 class GeminiClient(LLMClient):
