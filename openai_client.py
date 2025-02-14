@@ -3,11 +3,11 @@ from openai import OpenAI
 from base_client import LLMClient, LLMResponse, PromptType
 from typing import Any
 from dotenv import load_dotenv
+from pricing_config import get_pricing
 
 
 class OpenAIClient(LLMClient):
-    INPUT_TOKEN_PRICE = 2.5 / 1000000  # $2.50 per million input tokens
-    OUTPUT_TOKEN_PRICE = 10 / 1000000  # $10.00 per million output tokens
+    MODEL = "gpt-4o"
 
     def __init__(self):
         super().__init__()
@@ -18,7 +18,7 @@ class OpenAIClient(LLMClient):
     ) -> LLMResponse:
         print(f"Asking OpenAI...")
         completion = self.client.chat.completions.create(
-            model="gpt-4o",
+            model=self.MODEL,
             messages=[
                 {"role": "system", "content": self._PROMPTS[prompt_type]},
                 {"role": "user", "content": question},
@@ -29,11 +29,10 @@ class OpenAIClient(LLMClient):
         )
 
     def calculate_costs(self, response: Any) -> float:
-        input_tokens = response.usage.prompt_tokens
-        output_tokens = response.usage.completion_tokens
+        pricing = get_pricing(self.MODEL)
 
-        input_cost = input_tokens * OpenAIClient.INPUT_TOKEN_PRICE
-        output_cost = output_tokens * OpenAIClient.OUTPUT_TOKEN_PRICE
+        input_cost = response.usage.prompt_tokens * pricing.input_price
+        output_cost = response.usage.completion_tokens * pricing.output_price
         total_cost = input_cost + output_cost
 
         return total_cost

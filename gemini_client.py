@@ -4,11 +4,11 @@ from google import genai
 from google.genai import types
 from base_client import LLMClient, LLMResponse, PromptType
 from dotenv import load_dotenv
+from pricing_config import get_pricing
 
 
 class GeminiClient(LLMClient):
-    INPUT_TOKEN_PRICE = 0.1 / 1000000  # $0.10 per million input tokens
-    OUTPUT_TOKEN_PRICE = 0.4 / 1000000  # $0.40 per million output tokens
+    MODEL = "gemini-2.0-flash"
 
     def __init__(self):
         super().__init__()
@@ -19,7 +19,7 @@ class GeminiClient(LLMClient):
     ) -> LLMResponse:
         print(f"Asking Gemini...")
         response = self.client.models.generate_content(
-            model="gemini-2.0-flash",
+            model=self.MODEL,
             contents=question,
             config=types.GenerateContentConfig(
                 system_instruction=self._PROMPTS[prompt_type]
@@ -28,11 +28,12 @@ class GeminiClient(LLMClient):
         return LLMResponse(text=response.text, raw_response=response)
 
     def calculate_costs(self, response: Any) -> float:
-        input_tokens = response.usage_metadata.prompt_token_count
-        output_tokens = response.usage_metadata.candidates_token_count
+        pricing = get_pricing(self.MODEL)
 
-        input_cost = input_tokens * GeminiClient.INPUT_TOKEN_PRICE
-        output_cost = output_tokens * GeminiClient.OUTPUT_TOKEN_PRICE
+        input_cost = response.usage_metadata.prompt_token_count * pricing.input_price
+        output_cost = (
+            response.usage_metadata.candidates_token_count * pricing.output_price
+        )
         total_cost = input_cost + output_cost
 
         return total_cost

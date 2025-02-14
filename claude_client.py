@@ -3,11 +3,11 @@ import anthropic
 from base_client import LLMClient, LLMResponse, PromptType
 from typing import Any
 from dotenv import load_dotenv
+from pricing_config import get_pricing
 
 
 class ClaudeClient(LLMClient):
-    INPUT_TOKEN_PRICE = 3 / 1000000  # $3 per million input tokens
-    OUTPUT_TOKEN_PRICE = 15 / 1000000  # $15 per million output tokens
+    MODEL = "claude-3-5-sonnet-latest"
 
     def __init__(self):
         super().__init__()
@@ -18,7 +18,7 @@ class ClaudeClient(LLMClient):
     ) -> LLMResponse:
         print(f"Asking Claude...")
         response = self.client.messages.create(
-            model="claude-3-5-sonnet-latest",
+            model=self.MODEL,
             max_tokens=1024,
             system=self._PROMPTS[prompt_type],
             messages=[
@@ -28,11 +28,10 @@ class ClaudeClient(LLMClient):
         return LLMResponse(text=response.content[0].text, raw_response=response)
 
     def calculate_costs(self, response: Any) -> float:
-        input_tokens = response.usage.input_tokens
-        output_tokens = response.usage.output_tokens
+        pricing = get_pricing(self.MODEL)
 
-        input_cost = input_tokens * ClaudeClient.INPUT_TOKEN_PRICE
-        output_cost = output_tokens * ClaudeClient.OUTPUT_TOKEN_PRICE
+        input_cost = response.usage.input_tokens * pricing.input_price
+        output_cost = response.usage.output_tokens * pricing.output_price
         total_cost = input_cost + output_cost
 
         return total_cost
