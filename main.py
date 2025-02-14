@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from cross_validator import CrossValidator
-from markdown_printer import print_markdown
-from currency_converter import CurrencyConverter
+from utils.markdown_printer import print_markdown
+from utils.currency_converter import CurrencyConverter
 from model_selector import ModelSelector
 import time
 
