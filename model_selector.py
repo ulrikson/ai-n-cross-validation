@@ -5,17 +5,12 @@ from clients.base_client import LLMClient
 from clients.claude_client import ClaudeClient
 from clients.openai_client import OpenAIClient
 from clients.gemini_client import GeminiClient
+from models.model_config import ModelConfig
 
 
 class PerformanceMode(Enum):
     FAST = "f"
     COMPREHENSIVE = "c"
-
-
-@dataclass
-class ModelConfig:
-    client_class: Type[LLMClient]
-    model_name: str
 
 
 class ModelSelector:

@@ -2,17 +2,7 @@ import os
 from datetime import datetime
 from typing import List
 from clients.base_client import LLMClient
-from datetime import datetime
-from dataclasses import dataclass
-
-
-@dataclass
-class ValidationResult:
-    question: str
-    model_name: str
-    answer: str
-    cost: float = 0.0
-    timestamp: datetime = datetime.now()
+from models.validation_result import ValidationResult
 
 
 class CrossValidator:

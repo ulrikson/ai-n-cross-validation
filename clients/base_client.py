@@ -1,18 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Any
-from dataclasses import dataclass
 from enum import Enum, auto
+from models.llm_response import LLMResponse
 
 
 class PromptType(Enum):
     DEFAULT = auto()
     VALIDATION = auto()
-
-
-@dataclass
-class LLMResponse:
-    text: str
-    raw_response: Any
 
 
 class LLMClient(ABC):
