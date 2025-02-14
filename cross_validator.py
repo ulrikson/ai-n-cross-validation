@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from typing import List
-from base_client import LLMClient, LLMResponse
+from clients.base_client import LLMClient
 from validation_result import ValidationResult
 
 

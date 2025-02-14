@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Dict, Type
-from base_client import LLMClient
-from claude_client import ClaudeClient
-from openai_client import OpenAIClient
-from gemini_client import GeminiClient
+from typing import List, Type
+from clients.base_client import LLMClient
+from clients.claude_client import ClaudeClient
+from clients.openai_client import OpenAIClient
+from clients.gemini_client import GeminiClient
 
 
 class PerformanceMode(Enum):
