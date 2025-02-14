@@ -8,7 +8,7 @@ from pricing_config import get_pricing
 
 
 class GeminiClient(LLMClient):
-    MODEL = "gemini-2.0-flash"
+    MODEL = "gemini-2.0-flash-thinking-exp"
 
     def __init__(self):
         super().__init__()

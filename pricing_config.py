@@ -17,9 +17,17 @@ MODEL_PRICING_MAP = {
         input_price=2.5 / 1000000,  # $2.5 per million input tokens
         output_price=10 / 1000000,  # $10 per million output tokens
     ),
+    "gpt-4o-mini": TokenPricing(
+        input_price=0.15 / 1000000,  # $0.15 per million input tokens
+        output_price=0.6 / 1000000,  # $0.60 per million output tokens
+    ),
     "gemini-2.0-flash": TokenPricing(
         input_price=0.1 / 1000000,  # $0.10 per million input tokens
         output_price=0.4 / 1000000,  # $0.40 per million output tokens
+    ),
+    "gemini-2.0-flash-thinking-exp": TokenPricing(
+        input_price=0.1 / 1000000,  # pricing not available...
+        output_price=0.4 / 1000000,  # pricing not available...
     ),
 }
 
