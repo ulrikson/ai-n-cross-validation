@@ -1,6 +1,6 @@
 import os
 import anthropic
-from base_client import LLMClient, LLMResponse
+from base_client import LLMClient, LLMResponse, PromptType
 from typing import Any
 from dotenv import load_dotenv
 
@@ -13,12 +13,14 @@ class ClaudeClient(LLMClient):
         super().__init__()
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-    def ask_question(self, question: str) -> LLMResponse:
+    def ask_question(
+        self, question: str, prompt_type: PromptType = PromptType.DEFAULT
+    ) -> LLMResponse:
         print(f"Asking Claude...")
         response = self.client.messages.create(
             model="claude-3-5-sonnet-latest",
             max_tokens=1024,
-            system=self.SYSTEM_PROMPT,
+            system=self._PROMPTS[prompt_type],
             messages=[
                 {"role": "user", "content": question},
             ],

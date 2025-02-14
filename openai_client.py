@@ -1,6 +1,6 @@
 import os
 from openai import OpenAI
-from base_client import LLMClient, LLMResponse
+from base_client import LLMClient, LLMResponse, PromptType
 from typing import Any
 from dotenv import load_dotenv
 
@@ -13,12 +13,14 @@ class OpenAIClient(LLMClient):
         super().__init__()
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    def ask_question(self, question: str) -> LLMResponse:
+    def ask_question(
+        self, question: str, prompt_type: PromptType = PromptType.DEFAULT
+    ) -> LLMResponse:
         print(f"Asking OpenAI...")
         completion = self.client.chat.completions.create(
             model="gpt-4o",
             messages=[
-                {"role": "system", "content": self.SYSTEM_PROMPT},
+                {"role": "system", "content": self._PROMPTS[prompt_type]},
                 {"role": "user", "content": question},
             ],
         )

@@ -2,7 +2,7 @@ import os
 from typing import Any
 from google import genai
 from google.genai import types
-from base_client import LLMClient, LLMResponse
+from base_client import LLMClient, LLMResponse, PromptType
 from dotenv import load_dotenv
 
 
@@ -14,13 +14,15 @@ class GeminiClient(LLMClient):
         super().__init__()
         self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-    def ask_question(self, question: str) -> LLMResponse:
+    def ask_question(
+        self, question: str, prompt_type: PromptType = PromptType.DEFAULT
+    ) -> LLMResponse:
         print(f"Asking Gemini...")
         response = self.client.models.generate_content(
             model="gemini-2.0-flash",
             contents=question,
             config=types.GenerateContentConfig(
-                system_instruction=self.SYSTEM_PROMPT
+                system_instruction=self._PROMPTS[prompt_type]
             ),
         )
         return LLMResponse(text=response.text, raw_response=response)
