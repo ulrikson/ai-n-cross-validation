@@ -37,6 +37,7 @@ class LLMClient(ABC):
 
     def __init__(self):
         self.system_prompt = self._PROMPTS[PromptType.DEFAULT]
+        self.MODEL = None  # Will be set by ModelSelector
 
     @abstractmethod
     def ask_question(

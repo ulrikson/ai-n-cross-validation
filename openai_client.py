@@ -7,11 +7,10 @@ from pricing_config import get_pricing
 
 
 class OpenAIClient(LLMClient):
-    MODEL = "gpt-4o"
-
     def __init__(self):
         super().__init__()
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.MODEL = "gpt-4o"  # Default model, can be overridden
 
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT

@@ -7,11 +7,10 @@ from pricing_config import get_pricing
 
 
 class ClaudeClient(LLMClient):
-    MODEL = "claude-3-5-sonnet-latest"
-
     def __init__(self):
         super().__init__()
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        self.MODEL = "claude-3-5-sonnet-latest"  # Default model, can be overridden
 
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT

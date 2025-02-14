@@ -1,10 +1,8 @@
 from dotenv import load_dotenv
-from openai_client import OpenAIClient
-from gemini_client import GeminiClient
-from claude_client import ClaudeClient
 from cross_validator import CrossValidator
 from markdown_printer import print_markdown
 from currency_converter import CurrencyConverter
+from model_selector import ModelSelector
 
 load_dotenv()
 
@@ -14,8 +12,15 @@ CURRENCY = "SEK"
 def main():
     """Cross-validate an answer across multiple LLMs and print markdown output."""
     try:
+        # Get user's performance preference
+        selector = ModelSelector()
+        mode = selector.get_performance_mode()
+
+        # Get user's question
         question = input("Enter your question: ")
-        clients = [ClaudeClient(), OpenAIClient(), GeminiClient()]
+
+        # Select appropriate models based on performance mode
+        clients = selector.select_models(mode)
         validator = CrossValidator(clients)
 
         results = validator.validate(question)
