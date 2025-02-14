@@ -10,6 +10,7 @@ class OpenAIClient(LLMClient):
     OUTPUT_TOKEN_PRICE = 10 / 1000000  # $10.00 per million output tokens
 
     def __init__(self):
+        super().__init__()
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     def ask_question(self, question: str) -> LLMResponse:
@@ -17,7 +18,7 @@ class OpenAIClient(LLMClient):
         completion = self.client.chat.completions.create(
             model="gpt-4o",
             messages=[
-                {"role": "system", "content": "You are a research assistant."},
+                {"role": "system", "content": self.SYSTEM_PROMPT},
                 {"role": "user", "content": question},
             ],
         )

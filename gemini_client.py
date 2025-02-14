@@ -11,6 +11,7 @@ class GeminiClient(LLMClient):
     OUTPUT_TOKEN_PRICE = 0.4 / 1000000  # $0.40 per million output tokens
 
     def __init__(self):
+        super().__init__()
         self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
     def ask_question(self, question: str) -> LLMResponse:
@@ -19,7 +20,7 @@ class GeminiClient(LLMClient):
             model="gemini-2.0-flash",
             contents=question,
             config=types.GenerateContentConfig(
-                system_instruction="You are a research assistant."
+                system_instruction=self.SYSTEM_PROMPT
             ),
         )
         return LLMResponse(text=response.text, raw_response=response)

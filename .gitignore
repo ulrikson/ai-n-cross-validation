@@ -12,6 +12,7 @@ venv.bak/
 dist/
 build/
 *.egg-info/
+.DS_Store
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints

@@ -10,6 +10,7 @@ class ClaudeClient(LLMClient):
     OUTPUT_TOKEN_PRICE = 15 / 1000000  # $15 per million output tokens
 
     def __init__(self):
+        super().__init__()
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
     def ask_question(self, question: str) -> LLMResponse:
@@ -17,7 +18,7 @@ class ClaudeClient(LLMClient):
         response = self.client.messages.create(
             model="claude-3-5-sonnet-latest",
             max_tokens=1024,
-            system="You are a research assistant.",
+            system=self.SYSTEM_PROMPT,
             messages=[
                 {"role": "user", "content": question},
             ],
