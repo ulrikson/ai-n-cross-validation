@@ -4,3 +4,4 @@ google-genai
 urllib3==1.26.15
 rich
 anthropic
+mistralai

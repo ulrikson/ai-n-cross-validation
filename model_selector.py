@@ -1,8 +1,8 @@
-from dataclasses import dataclass
 from enum import Enum
-from typing import List, Type
+from typing import List
 from clients.base_client import LLMClient
 from clients.claude_client import ClaudeClient
+from clients.mistral_client import MistralClient
 from clients.openai_client import OpenAIClient
 from clients.gemini_client import GeminiClient
 from models.model_config import ModelConfig
@@ -15,12 +15,16 @@ class PerformanceMode(Enum):
 
 class ModelSelector:
     _FAST_MODELS = {
+        "mistral": ModelConfig(MistralClient, "mistral-small-latest"),
         "claude": ModelConfig(ClaudeClient, "claude-3-5-haiku-latest"),
         "openai": ModelConfig(OpenAIClient, "gpt-4o-mini"),
         "gemini": ModelConfig(GeminiClient, "gemini-2.0-flash"),
     }
 
     _COMPREHENSIVE_MODELS = {
+        "mistral": ModelConfig(
+            MistralClient, "mistral-small-latest"
+        ),  # TODO: add large model
         "claude": ModelConfig(ClaudeClient, "claude-3-5-sonnet-latest"),
         "openai": ModelConfig(OpenAIClient, "gpt-4o"),
         "gemini": ModelConfig(GeminiClient, "gemini-2.0-flash-thinking-exp"),

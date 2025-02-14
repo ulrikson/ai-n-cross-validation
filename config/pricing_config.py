@@ -33,6 +33,10 @@ MODEL_PRICING_MAP = {
         input_price=0.1 / 1000000,  # pricing not available...
         output_price=0.4 / 1000000,  # pricing not available...
     ),
+    "mistral-small-latest": TokenPricing(
+        input_price=0,  # Free
+        output_price=0,  # Free
+    ),
 }
 
 
