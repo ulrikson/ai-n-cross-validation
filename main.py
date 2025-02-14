@@ -3,6 +3,7 @@ from cross_validator import CrossValidator
 from markdown_printer import print_markdown
 from currency_converter import CurrencyConverter
 from model_selector import ModelSelector
+import time
 
 load_dotenv()
 
@@ -19,11 +20,12 @@ def main():
         # Get user's question
         question = input("Enter your question: ")
 
-        # Select appropriate models based on performance mode
+        start_time = time.time()  # Start time measurement
         clients = selector.select_models(mode)
         validator = CrossValidator(clients)
 
         results = validator.validate(question)
+        elapsed_time = time.time() - start_time  # Calculate elapsed time
 
         # Display the final answer (from the last LLM)
         final_result = results[-1]
@@ -35,6 +37,7 @@ def main():
 
         print_markdown("---")
         print_markdown(f"**Total cost**: {sek_amount:.3f} {CURRENCY}")
+        print_markdown(f"**Time taken**: {elapsed_time:.2f} seconds")
 
     except Exception as e:
         print(f"Error: {str(e)}")
