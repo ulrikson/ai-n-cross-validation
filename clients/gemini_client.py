@@ -11,7 +11,7 @@ class GeminiClient(LLMClient):
     def __init__(self):
         super().__init__()
         self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-        self.MODEL = "gemini-2.0-flash-thinking-exp"  # Default model, can be overridden
+        self.MODEL = "gemini-2.0-flash-thinking-exp"
 
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT

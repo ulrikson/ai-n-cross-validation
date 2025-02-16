@@ -10,7 +10,7 @@ class ClaudeClient(LLMClient):
     def __init__(self):
         super().__init__()
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-        self.MODEL = "claude-3-5-sonnet-latest"  # Default model, can be overridden
+        self.MODEL = "claude-3-5-sonnet-latest"
 
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT

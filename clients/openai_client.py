@@ -10,7 +10,7 @@ class OpenAIClient(LLMClient):
     def __init__(self):
         super().__init__()
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        self.MODEL = "gpt-4o"  # Default model, can be overridden
+        self.MODEL = "gpt-4o"
 
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
