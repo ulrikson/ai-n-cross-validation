@@ -1,8 +1,9 @@
 import os
 from datetime import datetime
 from typing import List
-from clients.base_client import LLMClient, LLMResponse
+from clients.base_client import LLMClient
 from models.validation_result import ValidationResult
+from io import TextIOWrapper
 
 
 class CrossValidator:
@@ -18,13 +19,16 @@ class CrossValidator:
         """Save the results to a file."""
         filename = f"outputs/validation_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
 
-        with open(filename, "w") as f:
-            f.write(f"Question: {results[0].question}\n\n")
-            for result in results:
-                f.write(f"Model: {result.model_name}\n")
-                f.write(f"Timestamp: {result.timestamp}\n")
-                f.write(f"Answer:\n{result.answer}\n\n")
-                f.write("-" * 80 + "\n\n")
+        with open(filename, "w") as file:
+            self._write_to_file(file, results)
+
+    def _write_to_file(self, file: TextIOWrapper, results: List[ValidationResult]):
+        """Write the results to a file."""
+        file.write(f"Question: {results[0].question}\n\n")
+        for result in results:
+            file.write(f"Model: {result.model_name}\n")
+            file.write(f"Timestamp: {result.timestamp}\n")
+            file.write(f"Answer:\n{result.answer}\n\n")
 
     def validate(self, question: str) -> List[ValidationResult]:
         """Validate an answer across multiple LLMs."""
