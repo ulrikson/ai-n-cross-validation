@@ -15,16 +15,16 @@ class PerformanceMode(Enum):
 
 class ModelSelector:
     _FAST_MODELS = {
+        "gemini": ModelConfig(GeminiClient, "gemini-2.0-flash"),
         "openai": ModelConfig(OpenAIClient, "gpt-4o-mini"),
         "claude": ModelConfig(ClaudeClient, "claude-3-5-haiku-latest"),
-        "gemini": ModelConfig(GeminiClient, "gemini-2.0-flash"),
         "mistral": ModelConfig(MistralClient, "mistral-small-latest"),
     }
 
     _COMPREHENSIVE_MODELS = {
+        "gemini": ModelConfig(GeminiClient, "gemini-2.0-flash-thinking-exp"),
         "openai": ModelConfig(OpenAIClient, "gpt-4o"),
         "claude": ModelConfig(ClaudeClient, "claude-3-5-sonnet-latest"),
-        "gemini": ModelConfig(GeminiClient, "gemini-2.0-flash-thinking-exp"),
         "mistral": ModelConfig(MistralClient, "mistral-large-latest"),
     }
 
