@@ -1,4 +1,10 @@
 from pathlib import Path
+from enum import Enum
+
+
+class InputMethod(Enum):
+    WRITE = "w"
+    FILE = "f"
 
 
 class QuestionInputHandler:
@@ -6,12 +12,11 @@ class QuestionInputHandler:
     def get_input_method():
         """Get the user's preferred input method."""
         while True:
-            choice = input("Choose input method ([W]rite/[F]ile) [W]: ").strip().upper()
-            if choice in ["", "W"]:
-                return "write"
-            if choice == "F":
-                return "file"
-            print("Invalid choice. Please enter 'W' for Write or 'F' for File.")
+            choice = input("Input method: [w]rite or [f]ile [w]: ").lower() or "w"
+            if choice in [method.value for method in InputMethod]:
+                return InputMethod(choice)
+
+            print("Invalid choice. Please enter 'w' for Write or 'f' for File.")
 
     @staticmethod
     def get_question_from_console():
@@ -45,6 +50,6 @@ class QuestionInputHandler:
         """Get the question using the user's preferred input method."""
         input_method = cls.get_input_method()
 
-        if input_method == "write":
+        if input_method == InputMethod.WRITE:
             return cls.get_question_from_console()
         return cls.get_question_from_file()

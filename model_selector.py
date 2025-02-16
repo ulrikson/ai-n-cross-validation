@@ -31,9 +31,10 @@ class ModelSelector:
     @staticmethod
     def get_performance_mode() -> PerformanceMode:
         while True:
-            choice = input("Choose: (f)ast or (c)omprehensive: ").lower()
+            choice = input("Choose: (f)ast or (c)omprehensive [f]: ").lower() or "f"
             if choice in [mode.value for mode in PerformanceMode]:
                 return PerformanceMode(choice)
+
             print("Invalid choice. Please enter 'f' for fast or 'c' for comprehensive.")
 
     def select_models(self, mode: PerformanceMode) -> List[LLMClient]:
