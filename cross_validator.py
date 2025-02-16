@@ -37,10 +37,11 @@ class CrossValidator:
 
         for i, client in enumerate(self.clients):
             try:
-                if i == 0:
-                    response = client.ask_question(question)
-                else:
-                    response = client.validate_answer(question, previous_answer)
+                response = (
+                    client.ask_question(question)
+                    if i == 0
+                    else client.validate_answer(question, previous_answer)
+                )
 
                 cost = client.calculate_costs(response.raw_response)
                 result = ValidationResult(

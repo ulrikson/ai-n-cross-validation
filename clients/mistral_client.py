@@ -10,7 +10,7 @@ class MistralClient(LLMClient):
     def __init__(self):
         super().__init__()
         self.client = Mistral(api_key=os.getenv("MISTRAL_API_KEY"))
-        self.MODEL = "mistral-small-latest"
+        self.MODEL = "mistral-large-latest"
 
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
