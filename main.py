@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from cross_validator import CrossValidator
 from utils.markdown_printer import print_markdown
 from utils.currency_converter import CurrencyConverter
+from utils.question_input_handler import QuestionInputHandler
 from model_selector import ModelSelector
 import time
 
@@ -17,8 +18,7 @@ def main():
         selector = ModelSelector()
         mode = selector.get_performance_mode()
 
-        # Get user's question
-        question = input("Enter your question: ")
+        question = QuestionInputHandler.get_question()
 
         start_time = time.time()  # Start time measurement
         clients = selector.select_models(mode)
