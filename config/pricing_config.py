@@ -37,6 +37,10 @@ MODEL_PRICING_MAP = {
         input_price=0,  # Free
         output_price=0,  # Free
     ),
+    "mistral-large-latest": TokenPricing(
+        input_price=2 / 1000000,  # $2 per million input tokens
+        output_price=6 / 1000000,  # $6 per million output tokens
+    ),
 }
 
 

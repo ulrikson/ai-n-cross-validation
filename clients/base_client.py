@@ -12,8 +12,10 @@ class PromptType(Enum):
 class LLMClient(ABC):
     _VALIDATION_PROMPT = (
         'I asked this question to my friend: "{original_question}" and received this answer: "{previous_answer}". '
-        "Carefully and critically read the text word by word and fact check it. "
-        "Please reply in markdown format."
+        "Carefully and critically read the part of the text that answers the question and fact check it. "
+        "Ignore the rest of the text."
+        "Return the original text with your annotations and comments in markdown format."
+        "Use the same language as the original text."
     )
 
     _PROMPTS = {
