@@ -14,7 +14,7 @@ class LLMClient(ABC):
         'I asked this question to my friend: "{original_question}" and received this answer: "{previous_answer}". '
         "Carefully read the text word by word and fact check each factual statement. "
         "If you find any factual errors, correct them. "
-        "If you don't find any errors, just return the original answer. "
+        "If you don't find any errors, just return the previous answer. "
         "Ensure the answer answers the original question. "
         "Please return your answer in markdown format."
         "Use the same language as the question."
