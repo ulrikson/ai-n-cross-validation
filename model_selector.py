@@ -16,24 +16,22 @@ class PerformanceMode(Enum):
 class ModelSelector:
     _FAST_MODELS = {
         "openai": ModelConfig(OpenAIClient, "gpt-4o-mini"),
-        "mistral": ModelConfig(MistralClient, "mistral-small-latest"),
         "claude": ModelConfig(ClaudeClient, "claude-3-5-haiku-latest"),
         "gemini": ModelConfig(GeminiClient, "gemini-2.0-flash"),
+        "mistral": ModelConfig(MistralClient, "mistral-small-latest"),
     }
 
     _COMPREHENSIVE_MODELS = {
         "openai": ModelConfig(OpenAIClient, "gpt-4o"),
-        "mistral": ModelConfig(MistralClient, "mistral-large-latest"),
         "claude": ModelConfig(ClaudeClient, "claude-3-5-sonnet-latest"),
         "gemini": ModelConfig(GeminiClient, "gemini-2.0-flash-thinking-exp"),
+        "mistral": ModelConfig(MistralClient, "mistral-large-latest"),
     }
 
     @staticmethod
     def get_performance_mode() -> PerformanceMode:
         while True:
-            choice = input(
-                "Performance mode? Choose: (f)ast or (c)omprehensive: "
-            ).lower()
+            choice = input("Choose: (f)ast or (c)omprehensive: ").lower()
             if choice in [mode.value for mode in PerformanceMode]:
                 return PerformanceMode(choice)
             print("Invalid choice. Please enter 'f' for fast or 'c' for comprehensive.")

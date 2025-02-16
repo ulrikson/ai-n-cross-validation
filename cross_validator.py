@@ -34,14 +34,19 @@ class CrossValidator:
         """Validate an answer across multiple LLMs."""
         results = []
         previous_answer = None
+        client_count = len(self.clients)
 
         for i, client in enumerate(self.clients):
+            initial_question = i == 0
+            last_question = i == client_count - 1
+
             try:
-                response = (
-                    client.ask_question(question)
-                    if i == 0
-                    else client.validate_answer(question, previous_answer)
-                )
+                if initial_question:
+                    response = client.ask_question(question)
+                elif last_question:
+                    response = client.summarize_answer(question, previous_answer)
+                else:
+                    response = client.validate_answer(question, previous_answer)
 
                 cost = client.calculate_costs(response.raw_response)
                 result = ValidationResult(
