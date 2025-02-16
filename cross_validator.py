@@ -44,7 +44,7 @@ class CrossValidator:
                 if initial_question:
                     response = client.ask_question(question)
                 elif last_question:
-                    response = client.summarize_answer(question, previous_answer)
+                    response = client.summarize_answer(results)
                 else:
                     response = client.validate_answer(question, previous_answer)
 

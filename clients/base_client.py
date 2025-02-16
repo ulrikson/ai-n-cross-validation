@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, List
 from enum import Enum, auto
 from models.llm_response import LLMResponse
+from models.validation_result import ValidationResult
 
 
 class PromptType(Enum):
@@ -20,14 +21,13 @@ class LLMClient(ABC):
     )
 
     _SUMMARIZE_PROMPT = (
-        "You've been given a fact checked answer to a question. "
-        'The question is: "{original_question}". '
-        'The answer is: "{previous_answer}". '
-        "The answer contains annotations and comments in markdown format. "
-        "Use the annotations and comments to update the answer. "
-        "Remove any information that does not answer the question. "
-        "Just return the updated answer, do not include any other text."
+        "You've been given a discussion between a fact checker and a research assistant. "
+        'The original question was: "{original_question}". '
+        'The discussion has been: "{previous_answer}". '
+        "Distill the discussion into a single answer to the question."
+        "Elaborate on any points that are not clear."
         "Use the same language as the original text."
+        "Return the answer in markdown format."
     )
 
     _PROMPTS = {
@@ -57,12 +57,18 @@ class LLMClient(ABC):
         )
         return self.ask_question(prompt, PromptType.VALIDATION)
 
-    def summarize_answer(
-        self, original_question: str, previous_answer: str
-    ) -> LLMResponse:
-        prompt = self._SUMMARIZE_PROMPT.format(
-            original_question=original_question, previous_answer=previous_answer
+    def summarize_answer(self, discussion: List[ValidationResult]) -> LLMResponse:
+        question = discussion[0].question
+        full_discussion = "\n\n".join(
+            [
+                f"Question: {result.question}\nAnswer: {result.answer}"
+                for result in discussion
+            ]
         )
+        prompt = self._SUMMARIZE_PROMPT.format(
+            original_question=question, previous_answer=full_discussion
+        )
+
         return self.ask_question(prompt, PromptType.DEFAULT)
 
     @abstractmethod
