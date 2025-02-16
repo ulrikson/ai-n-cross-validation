@@ -1,10 +1,10 @@
 # AI Cross Validator
 
-AI Cross Validator is a project that leverages multiple AI models to answer questions. By cross validating responses from several large language models (LLMs) like Claude, OpenAI's GPT, and Gemini, the project aims to provide more reliable and robust answers that are less likely to be incorrect.
+AI Cross Validator is a project that leverages multiple AI models to answer questions. By cross validating responses from several large language models (LLMs) like Claude, OpenAI's GPT, Gemini, and Mistral, the project aims to provide more reliable and robust answers that are less likely to be incorrect.
 
 ## Overview
 
-The core idea behind this project is simple: instead of relying on a single AI's response, we ask multiple AIs the same question and then compare or validate their answers. This approach can help mitigate individual model biases or errors, giving you increased confidence in the final answer.
+The core idea behind this project is simple: instead of relying on a single AI's response, we ask multiple AIs the same question and then compare or validate their answers. At any point, one model (as specified by the user) answers the question, while two other models fact-check the response, and a fourth model summarizes the findings. This approach can help mitigate individual model biases or errors, giving you increased confidence in the final answer.
 
 ## Key Benefits
 
@@ -15,8 +15,8 @@ The core idea behind this project is simple: instead of relying on a single AI's
 
 ## Features
 
-- **Multi-AI Integration**: Supports Claude, OpenAI (GPT-4o), and Gemini.
-- **Cross Validation**: Compare responses from different models to derive a consensus.
+- **Multi-AI Integration**: Supports Claude, OpenAI (GPT-4o), Gemini, and Mistral.
+- **Cross Validation**: One model answers the question, two models fact-check, and a fourth summarizes the findings.
 - **Cost Tracking**: Prints the pricing cost of each call based on tokens consumed.
 - **Modular Design**: Follows SOLID principles and best practices, keeping functions simple and maintainable.
 
@@ -29,6 +29,7 @@ The core idea behind this project is simple: instead of relying on a single AI's
   - `ANTHROPIC_API_KEY` for Claude
   - `OPENAI_API_KEY` for OpenAI
   - `GEMINI_API_KEY` for Gemini
+  - `MISTRAL_API_KEY` for Mistral
 
 ### Installation
 
@@ -57,6 +58,7 @@ The core idea behind this project is simple: instead of relying on a single AI's
    ANTHROPIC_API_KEY=your_claude_api_key_here
    OPENAI_API_KEY=your_openai_api_key_here
    GEMINI_API_KEY=your_gemini_api_key_here
+   MISTRAL_API_KEY=your_mistral_api_key_here
    ```
 
 ### Usage
