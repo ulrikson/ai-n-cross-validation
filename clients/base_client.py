@@ -23,14 +23,14 @@ class LLMClient(ABC):
     _SUMMARIZE_PROMPT = (
         "You've been given a discussion between a fact checker and a research assistant. "
         'The original question was: "{original_question}". '
-        'The discussion has been: "{previous_answer}". '
+        'The discussion has been: "{discussion}". '
         "Distill the discussion into a single answer to the question."
         "Elaborate on any points that are not clear."
         "Use the same language as the original text."
         "Return the answer in markdown format."
     )
 
-    _PROMPTS = {
+    _PROMPTS = {  # todo: should be called _SYSTEM_PROMPTS
         PromptType.VALIDATION: (
             "You are an experienced fact checker. "
             "You've worked for esteemed publications like The New Yorker and The Economist."
@@ -66,7 +66,7 @@ class LLMClient(ABC):
             ]
         )
         prompt = self._SUMMARIZE_PROMPT.format(
-            original_question=question, previous_answer=full_discussion
+            original_question=question, discussion=full_discussion
         )
 
         return self.ask_question(prompt, PromptType.DEFAULT)
