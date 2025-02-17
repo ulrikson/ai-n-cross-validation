@@ -15,7 +15,7 @@ class ClaudeClient(LLMClient):
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponse:
-        print(f"Asking Claude...")
+        print(f"{self.MODEL} is thinking...")
         response = self.client.messages.create(
             model=self.MODEL,
             max_tokens=1024,

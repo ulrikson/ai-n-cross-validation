@@ -15,7 +15,7 @@ class MistralClient(LLMClient):
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponse:
-        print(f"Asking Mistral...")
+        print(f"{self.MODEL} is thinking...")
         completion = self.client.chat.complete(
             model=self.MODEL,
             messages=[

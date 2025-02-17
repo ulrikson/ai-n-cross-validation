@@ -15,7 +15,7 @@ class OpenAIClient(LLMClient):
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponse:
-        print(f"Asking OpenAI...")
+        print(f"{self.MODEL} is thinking...")
         completion = self.client.chat.completions.create(
             model=self.MODEL,
             messages=[

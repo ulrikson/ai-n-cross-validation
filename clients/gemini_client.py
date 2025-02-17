@@ -16,7 +16,7 @@ class GeminiClient(LLMClient):
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponse:
-        print(f"Asking Gemini...")
+        print(f"{self.MODEL} is thinking...")
         response = self.client.models.generate_content(
             model=self.MODEL,
             contents=question,
