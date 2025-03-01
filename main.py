@@ -3,6 +3,7 @@ from model_selector import ModelSelector
 from models import ValidationResultDict
 from typing import List
 import time
+import sys
 from utils import (
     convert_to_sek,
     print_markdown,
@@ -16,18 +17,39 @@ load_dotenv()
 def main():
     """Cross-validate an answer across multiple LLMs and print markdown output."""
     try:
-        run_validation_process()
+        # Parse command-line arguments
+        mode_arg, input_method_arg = parse_command_args()
+        run_validation_process(mode_arg, input_method_arg)
     except Exception as e:
         print(f"Error: {str(e)}")
         raise SystemExit(1)
 
 
-def run_validation_process() -> None:
+def parse_command_args():
+    """Parse command-line arguments for mode and input method.
+
+    Returns:
+        Tuple of (mode, input_method)
+    """
+    # Default values
+    mode = None
+    input_method = None
+
+    # Get arguments if they exist
+    if len(sys.argv) > 1:
+        mode = sys.argv[1]
+    if len(sys.argv) > 2:
+        input_method = sys.argv[2]
+
+    return mode, input_method
+
+
+def run_validation_process(mode_arg=None, input_method_arg=None) -> None:
     """Run the validation process with selected models."""
     # Get user's performance preference
     selector = ModelSelector()
-    mode = selector.get_performance_mode()
-    question = get_question()
+    mode = selector.get_performance_mode(mode_arg)
+    question = get_question(input_method_arg)
 
     start_time = time.time()  # Start time measurement
 

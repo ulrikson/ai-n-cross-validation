@@ -3,7 +3,7 @@ from rich.markdown import Markdown
 from pathlib import Path
 from datetime import datetime
 import os
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 # Currency conversion
 EXCHANGE_RATES = {
@@ -22,13 +22,21 @@ def print_markdown(markdown_text: str) -> None:
     console.print(Markdown(markdown_text))
 
 
-def get_question():
-    """Get the question from the user via console or file."""
-    method = input("Input method: [w]rite or [f]ile [w]: ").lower() or "w"
+def get_question(input_method: Optional[str] = None) -> str:
+    """Get the question from the user via console or file.
 
-    if method == "w":
+    Args:
+        input_method: 'write' or 'file', defaults to 'write' if None
+    """
+    method = input_method.lower() if input_method else "write"
+
+    if method not in ["write", "w", "file", "f"]:
+        print(f"Invalid input method '{input_method}'. Using 'write' method.")
+        method = "write"
+
+    if method in ["write", "w"]:
         return input("Enter your question: ").strip()
-    elif method == "f":
+    elif method in ["file", "f"]:
         while True:
             filename = input("Enter the path to your question file: ").strip()
             file_path = Path(filename)
@@ -46,9 +54,9 @@ def get_question():
                     return question
             except Exception as e:
                 print(f"Error reading file: {str(e)}")
-    else:
-        print("Invalid choice. Please enter 'w' for Write or 'f' for File.")
-        return get_question()
+
+    # This should not be reached, but just in case
+    return get_question("write")
 
 
 def ensure_output_directory():

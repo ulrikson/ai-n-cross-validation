@@ -1,27 +1,33 @@
 from enum import Enum
-from typing import List
+from typing import List, Optional
 from clients import create_client, BaseLLMClient
 from config import get_performance_mode_config
 
 
 class PerformanceMode(Enum):
-    FAST = "f"
-    COMPREHENSIVE = "c"
+    FAST = "fast"
+    COMPREHENSIVE = "comprehensive"
 
 
 class ModelSelector:
     @staticmethod
-    def get_performance_mode() -> PerformanceMode:
-        while True:
-            choice = input("Choose: (f)ast or (c)omprehensive [f]: ").lower() or "f"
-            if choice in [mode.value for mode in PerformanceMode]:
-                return PerformanceMode(choice)
+    def get_performance_mode(mode_arg: Optional[str] = None) -> PerformanceMode:
+        """Get performance mode from argument or use default."""
+        if mode_arg is None:
+            return PerformanceMode.FAST
 
-            print("Invalid choice. Please enter 'f' for fast or 'c' for comprehensive.")
+        mode = mode_arg.lower()
+        if mode == "fast" or mode == "f":
+            return PerformanceMode.FAST
+        elif mode == "comprehensive" or mode == "c":
+            return PerformanceMode.COMPREHENSIVE
+        else:
+            print(f"Invalid mode '{mode_arg}'. Using 'fast' mode.")
+            return PerformanceMode.FAST
 
     def select_models(self, mode: PerformanceMode) -> List[BaseLLMClient]:
-        mode_name = "fast" if mode == PerformanceMode.FAST else "comprehensive"
-        model_configs = get_performance_mode_config(mode_name)
+        """Select models based on performance mode."""
+        model_configs = get_performance_mode_config(mode.value)
 
         clients = []
         for config in model_configs.values():
