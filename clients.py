@@ -77,7 +77,6 @@ class ClaudeClient(BaseLLMClient):
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponseDict:
-        print(f"{self.model_name} is thinking...")
         system_prompt = get_system_prompt(
             "default" if prompt_type == PromptType.DEFAULT else "validation"
         )
@@ -109,7 +108,6 @@ class OpenAIClient(BaseLLMClient):
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponseDict:
-        print(f"{self.model_name} is thinking...")
         system_prompt = get_system_prompt(
             "default" if prompt_type == PromptType.DEFAULT else "validation"
         )
@@ -142,7 +140,6 @@ class MistralClient(BaseLLMClient):
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponseDict:
-        print(f"{self.model_name} is thinking...")
         system_prompt = get_system_prompt(
             "default" if prompt_type == PromptType.DEFAULT else "validation"
         )
@@ -179,7 +176,6 @@ class GeminiClient(BaseLLMClient):
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponseDict:
-        print(f"{self.model_name} is thinking...")
         system_prompt = get_system_prompt(
             "default" if prompt_type == PromptType.DEFAULT else "validation"
         )
