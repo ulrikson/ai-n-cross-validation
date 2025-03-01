@@ -22,31 +22,38 @@ class PromptType(Enum):
 
 class BaseLLMClient(ABC):
     """Base abstract class for all LLM clients."""
-    
+
     def __init__(self, model_name: str):
         self.model_name = model_name
         self.name = self.__class__.__name__
-    
+
     @abstractmethod
-    def ask_question(self, question: str, prompt_type: PromptType = PromptType.DEFAULT) -> LLMResponseDict:
+    def ask_question(
+        self, question: str, prompt_type: PromptType = PromptType.DEFAULT
+    ) -> LLMResponseDict:
         """Ask a question to the LLM."""
         pass
-    
+
     @abstractmethod
     def calculate_costs(self, response: Any) -> float:
         """Calculate the cost of a response."""
         pass
-    
-    def validate_answer(self, original_question: str, previous_answer: str) -> LLMResponseDict:
+
+    def validate_answer(
+        self, original_question: str, previous_answer: str
+    ) -> LLMResponseDict:
         """Validate an answer using the LLM."""
         prompt = get_prompt_template("validation").format(
             original_question=original_question, previous_answer=previous_answer
         )
         return self.ask_question(prompt, PromptType.VALIDATION)
-    
-    def summarize_answer(self, discussion: List[ValidationResultDict]) -> LLMResponseDict:
+
+    def summarize_answer(
+        self, discussion: List[ValidationResultDict]
+    ) -> LLMResponseDict:
         """Summarize a discussion using the LLM."""
         question = discussion[0]["question"]
+
         full_discussion = "\n\n".join(
             [
                 f"Question: {result['question']}\nAnswer: {result['answer']}"
@@ -61,13 +68,15 @@ class BaseLLMClient(ABC):
 
 class ClaudeClient(BaseLLMClient):
     """Claude client implementation."""
-    
+
     def __init__(self, model_name: str):
         super().__init__(model_name)
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
         self.name = "Claude"
-    
-    def ask_question(self, question: str, prompt_type: PromptType = PromptType.DEFAULT) -> LLMResponseDict:
+
+    def ask_question(
+        self, question: str, prompt_type: PromptType = PromptType.DEFAULT
+    ) -> LLMResponseDict:
         print(f"{self.model_name} is thinking...")
         system_prompt = get_system_prompt(
             "default" if prompt_type == PromptType.DEFAULT else "validation"
@@ -81,7 +90,7 @@ class ClaudeClient(BaseLLMClient):
             ],
         )
         return create_llm_response(text=response.content[0].text, raw_response=response)
-    
+
     def calculate_costs(self, response: Any) -> float:
         pricing = get_pricing(self.model_name)
         input_cost = response.usage.input_tokens * pricing["input_price"]
@@ -91,13 +100,15 @@ class ClaudeClient(BaseLLMClient):
 
 class OpenAIClient(BaseLLMClient):
     """OpenAI client implementation."""
-    
+
     def __init__(self, model_name: str):
         super().__init__(model_name)
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.name = "OpenAI"
-    
-    def ask_question(self, question: str, prompt_type: PromptType = PromptType.DEFAULT) -> LLMResponseDict:
+
+    def ask_question(
+        self, question: str, prompt_type: PromptType = PromptType.DEFAULT
+    ) -> LLMResponseDict:
         print(f"{self.model_name} is thinking...")
         system_prompt = get_system_prompt(
             "default" if prompt_type == PromptType.DEFAULT else "validation"
@@ -112,7 +123,7 @@ class OpenAIClient(BaseLLMClient):
         return create_llm_response(
             text=completion.choices[0].message.content, raw_response=completion
         )
-    
+
     def calculate_costs(self, response: Any) -> float:
         pricing = get_pricing(self.model_name)
         input_cost = response.usage.prompt_tokens * pricing["input_price"]
@@ -122,13 +133,15 @@ class OpenAIClient(BaseLLMClient):
 
 class MistralClient(BaseLLMClient):
     """Mistral client implementation."""
-    
+
     def __init__(self, model_name: str):
         super().__init__(model_name)
         self.client = Mistral(api_key=os.getenv("MISTRAL_API_KEY"))
         self.name = "Mistral"
-    
-    def ask_question(self, question: str, prompt_type: PromptType = PromptType.DEFAULT) -> LLMResponseDict:
+
+    def ask_question(
+        self, question: str, prompt_type: PromptType = PromptType.DEFAULT
+    ) -> LLMResponseDict:
         print(f"{self.model_name} is thinking...")
         system_prompt = get_system_prompt(
             "default" if prompt_type == PromptType.DEFAULT else "validation"
@@ -144,7 +157,7 @@ class MistralClient(BaseLLMClient):
             text=completion.choices[0].message.content,
             raw_response=completion,
         )
-    
+
     def calculate_costs(self, response: Any) -> float:
         pricing = get_pricing(self.model_name)
         input_tokens = response.usage.prompt_tokens
@@ -157,13 +170,15 @@ class MistralClient(BaseLLMClient):
 
 class GeminiClient(BaseLLMClient):
     """Gemini client implementation."""
-    
+
     def __init__(self, model_name: str):
         super().__init__(model_name)
         self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
         self.name = "Gemini"
-    
-    def ask_question(self, question: str, prompt_type: PromptType = PromptType.DEFAULT) -> LLMResponseDict:
+
+    def ask_question(
+        self, question: str, prompt_type: PromptType = PromptType.DEFAULT
+    ) -> LLMResponseDict:
         print(f"{self.model_name} is thinking...")
         system_prompt = get_system_prompt(
             "default" if prompt_type == PromptType.DEFAULT else "validation"
@@ -174,7 +189,7 @@ class GeminiClient(BaseLLMClient):
             config=types.GenerateContentConfig(system_instruction=system_prompt),
         )
         return create_llm_response(text=response.text, raw_response=response)
-    
+
     def calculate_costs(self, response: Any) -> float:
         pricing = get_pricing(self.model_name)
         input_cost = response.usage_metadata.prompt_token_count * pricing["input_price"]

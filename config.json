@@ -70,13 +70,5 @@
 				"model": "mistral-large-latest"
 			}
 		}
-	},
-	"prompts": {
-		"validation": "TASK I asked this question to my friend: \"{original_question}\" and received this answer: \"{previous_answer}\". Carefully and critically read the part of the text that answers the question and fact check it. Ignore the rest of the text. Return the original text with your annotations and comments in markdown format. Use the same language as the original text.",
-		"summarize": "TASK You've been given a discussion between a fact checker and a research assistant. The original question was: \"{original_question}\". The discussion has been: \"{discussion}\". Distill the discussion into a single answer to the question. Elaborate on any points that are not clear. Use the same language as the original text. Return the answer in markdown format."
-	},
-	"system_prompts": {
-		"validation": "SYSTEM You are an experienced fact checker. You've worked for esteemed publications like The New Yorker and The Economist. You follow their best practices for fact checking.",
-		"default": "SYSTEM You are a highly capable, thoughtful, and precise assistant. Your goal is to deeply understand the user's intent, think step-by-step through complex problems, provide clear and accurate answers, and proactively anticipate helpful follow-up information. Always prioritize being truthful, nuanced, insightful, and efficient, tailoring your responses specifically to the user's needs and preferences. "
 	}
 }

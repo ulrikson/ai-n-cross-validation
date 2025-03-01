@@ -1,4 +1,5 @@
 import json
+import os
 from typing import Dict, Any
 
 
@@ -24,18 +25,37 @@ def get_performance_mode_config(mode: str) -> Dict[str, Dict[str, str]]:
     return config["performance_modes"][mode]
 
 
+def read_prompt_file(filename: str) -> str:
+    """Read a prompt from a markdown file."""
+    filepath = os.path.join("prompts", filename)
+    with open(filepath, "r") as f:
+        return f.read().strip()
+
+
 def get_prompt_template(prompt_type: str) -> str:
     """Get a prompt template by type."""
-    config = load_config()
-    if prompt_type not in config["prompts"]:
-        raise ValueError(f"Prompt template {prompt_type} not found in configuration")
-    return config["prompts"][prompt_type]
+    prompt_file_map = {
+        "validation": "validation_prompt.md",
+        "summarize": "summarize_prompt.md",
+    }
+
+    if prompt_type not in prompt_file_map:
+        raise ValueError(f"Prompt template {prompt_type} not found")
+
+    file = prompt_file_map[prompt_type]
+    content = read_prompt_file(file)
+    return content
 
 
 def get_system_prompt(prompt_type: str) -> str:
     """Get a system prompt by type."""
-    config = load_config()
     prompt_type = prompt_type.lower()
-    if prompt_type not in config["system_prompts"]:
-        raise ValueError(f"System prompt {prompt_type} not found in configuration")
-    return config["system_prompts"][prompt_type]
+    system_prompt_file_map = {
+        "default": "default_system_prompt.md",
+        "validation": "validation_system_prompt.md",
+    }
+
+    if prompt_type not in system_prompt_file_map:
+        raise ValueError(f"System prompt {prompt_type} not found")
+
+    return read_prompt_file(system_prompt_file_map[prompt_type])
