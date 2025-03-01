@@ -29,10 +29,10 @@ def main():
 
         # Display the final answer (from the last LLM)
         final_result = results[-1]
-        print_markdown(final_result.answer)
+        print_markdown(final_result["answer"])
 
         # Calculate total costs
-        total_cost = sum(result.cost for result in results)
+        total_cost = sum(result["cost"] for result in results)
         sek_amount = CurrencyConverter.convert(total_cost, CURRENCY)
 
         print_markdown("---")

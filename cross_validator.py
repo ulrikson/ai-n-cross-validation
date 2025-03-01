@@ -1,13 +1,12 @@
 import os
 from datetime import datetime
-from typing import List, Dict
-from clients.base_client import LLMClient
-from models import create_validation_result, ValidationResultDict
+from typing import List, Dict, Any
 from io import TextIOWrapper
+from models import create_validation_result, ValidationResultDict
 
 
 class CrossValidator:
-    def __init__(self, clients: List[LLMClient]):
+    def __init__(self, clients: List[Dict[str, Any]]):
         self.clients = clients
         self._ensure_output_directory()
 
@@ -42,16 +41,16 @@ class CrossValidator:
 
             try:
                 if initial_question:
-                    response = client.ask_question(question)
+                    response = client["ask_question"](question)
                 elif last_question:
-                    response = client.summarize_answer(results)
+                    response = client["summarize_answer"](results)
                 else:
-                    response = client.validate_answer(question, previous_answer)
+                    response = client["validate_answer"](question, previous_answer)
 
-                cost = client.calculate_costs(response["raw_response"])
+                cost = client["calculate_costs"](response["raw_response"])
                 result = create_validation_result(
                     question=question,
-                    model_name=client.__class__.__name__,
+                    model_name=client["name"],
                     answer=response["text"],
                     cost=cost,
                 )
@@ -64,8 +63,8 @@ class CrossValidator:
         self._save_to_file(results)
         return results
 
-    def _handle_error(self, client: LLMClient, error: Exception):
+    def _handle_error(self, client: Dict[str, Any], error: Exception):
         """Handle errors by printing a message and continuing to the next model."""
         print(
-            f"Error with {client.__class__.__name__}: {str(error)}. Continuing to next model."
+            f"Error with {client['name']}: {str(error)}. Continuing to next model."
         )
