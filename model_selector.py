@@ -25,8 +25,10 @@ class ModelSelector:
 
         clients = []
         for config in model_configs.values():
-            client = create_client(config["provider"])
-            client["MODEL"] = config["model"]
+            client = create_client(
+                provider=config["provider"],
+                model_name=config["model"],
+            )
             clients.append(client)
 
         return clients
