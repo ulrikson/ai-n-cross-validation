@@ -4,10 +4,9 @@ from models import ValidationResultDict
 from typing import List
 import time
 from utils import (
-    convert_currency,
+    convert_to_sek,
     print_markdown,
     get_question,
-    CURRENCY,
 )
 from validator import validate_with_models
 
@@ -38,7 +37,9 @@ def run_validation_process() -> None:
     )
 
     print_final_answer(results)
-    print_total_cost(results, start_time)
+    print_markdown("---")
+    print_total_cost(results)
+    print_total_time(start_time)
 
 
 def print_final_answer(results: List[ValidationResultDict]) -> None:
@@ -47,18 +48,23 @@ def print_final_answer(results: List[ValidationResultDict]) -> None:
     print_markdown(final_result["answer"])
 
 
-def print_total_cost(results: List[ValidationResultDict], start_time: float) -> None:
-    """Print the total cost."""
-    total_cost = (
-        sum(result["cost"] for result in results) / 1000000
-    )  # Costs are per million tokens
+def print_total_cost(results: List[ValidationResultDict]) -> None:
+    """Print the total cost in SEK."""
+    total_cost = calculate_total_cost(results)
+    sek_amount = convert_to_sek(total_cost)
 
-    sek_amount = convert_currency(total_cost, CURRENCY)
-    elapsed_time = time.time() - start_time  # Calculate elapsed time
+    print_markdown(f"**Total cost**: {sek_amount:.3f} SEK")
 
-    print_markdown("---")
-    print_markdown(f"**Total cost**: {sek_amount:.3f} {CURRENCY}")
-    print_markdown(f"**Time taken**: {elapsed_time:.2f} seconds")
+
+def calculate_total_cost(results: List[ValidationResultDict]) -> float:
+    """Calculate the total cost. Costs are per million tokens."""
+    return sum(result["cost"] for result in results) / 1000000
+
+
+def print_total_time(start_time: float) -> None:
+    """Print the total time taken for the validation process."""
+    elapsed_time = time.time() - start_time
+    print_markdown(f"**Total time**: {elapsed_time:.2f} seconds")
 
 
 if __name__ == "__main__":

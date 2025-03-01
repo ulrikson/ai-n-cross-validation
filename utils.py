@@ -6,19 +6,14 @@ import os
 from typing import Dict, List
 
 # Currency conversion
-CURRENCY = "SEK"
 EXCHANGE_RATES = {
-    "USD": 1.0,
     "SEK": 10.83,  # Last updated 2025-02-13
 }
 
 
-def convert_currency(amount: float, target_currency: str) -> float:
-    """Convert USD amount to target currency."""
-    target_currency = target_currency.upper()
-    if target_currency not in EXCHANGE_RATES:
-        raise ValueError(f"Unsupported currency: {target_currency}")
-    return amount * EXCHANGE_RATES[target_currency]
+def convert_to_sek(amount: float) -> float:
+    """Convert USD amount to SEK."""
+    return amount * EXCHANGE_RATES["SEK"]
 
 
 def print_markdown(markdown_text: str) -> None:
