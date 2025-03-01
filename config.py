@@ -21,4 +21,4 @@ def get_performance_mode_config(mode: str) -> Dict[str, Dict[str, str]]:
     config = load_config()
     if mode not in config["performance_modes"]:
         raise ValueError(f"Performance mode {mode} not found in configuration")
-    return config["performance_modes"][mode] 
+    return config["performance_modes"][mode]

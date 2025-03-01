@@ -1,36 +1,36 @@
 {
   "models": {
     "claude-3-5-haiku-latest": {
-      "input_price": 0.0000008,
-      "output_price": 0.000004
+      "input_price": 0.8,
+      "output_price": 4
     },
     "claude-3-5-sonnet-latest": {
-      "input_price": 0.000003,
-      "output_price": 0.000015
+      "input_price": 3,
+      "output_price": 15
     },
     "gpt-4o-mini": {
-      "input_price": 0.00000015,
-      "output_price": 0.0000006
+      "input_price": 0.15,
+      "output_price": 0.6
     },
     "gpt-4o": {
-      "input_price": 0.0000025,
-      "output_price": 0.00001
+      "input_price": 2.5,
+      "output_price": 10
     },
     "gemini-2.0-flash": {
-      "input_price": 0.0000001,
-      "output_price": 0.0000004
+      "input_price": 0.1,
+      "output_price": 0.4
     },
     "gemini-2.0-flash-thinking-exp": {
-      "input_price": 0.0000001,
-      "output_price": 0.0000004
+      "input_price": 0.1,
+      "output_price": 0.4
     },
     "mistral-small-latest": {
       "input_price": 0,
       "output_price": 0
     },
     "mistral-large-latest": {
-      "input_price": 0.000002,
-      "output_price": 0.000006
+      "input_price": 2,
+      "output_price": 6
     }
   },
   "performance_modes": {
