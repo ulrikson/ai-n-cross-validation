@@ -40,11 +40,11 @@ class BaseLLMClient(ABC):
         pass
 
     def validate_answer(
-        self, original_question: str, previous_answer: str
+        self, original_question: str, initial_answer: str
     ) -> LLMResponseDict:
         """Validate an answer using the LLM."""
         prompt = get_prompt_template("validation").format(
-            original_question=original_question, previous_answer=previous_answer
+            original_question=original_question, initial_answer=initial_answer
         )
         return self.ask_question(prompt, PromptType.VALIDATION)
 

@@ -9,7 +9,7 @@ def validate_with_models(
 ) -> List[ValidationResultDict]:
     """Validate an answer across multiple LLMs."""
     results = []
-    previous_answer = None
+    initial_answer = None
     client_count = len(clients)
 
     for i, client in enumerate(clients):
@@ -19,10 +19,11 @@ def validate_with_models(
         try:
             if initial_question:
                 response = client.ask_question(question)
+                initial_answer = response["text"]
             elif last_question:
                 response = client.summarize_answer(results)
             else:
-                response = client.validate_answer(question, previous_answer)
+                response = client.validate_answer(question, initial_answer)
 
             cost = client.calculate_costs(response["raw_response"])
             result = create_validation_result(
@@ -32,7 +33,6 @@ def validate_with_models(
                 cost=cost,
             )
             results.append(result)
-            previous_answer = response["text"]
 
         except Exception as e:
             print(f"Error with {client.name}: {str(e)}. Continuing to next model.")

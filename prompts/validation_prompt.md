@@ -1,6 +1,6 @@
 **TASK**
 
-I asked this question to my friend: "{original_question}" and received this answer: "{previous_answer}". Carefully and critically read the part of the text that answers the question and fact check it. Ignore the rest of the text.
+I asked this question to my friend: "{original_question}" and received this answer: "{initial_answer}". Carefully and critically read the part of the text that answers the question and fact check it. Ignore the rest of the text.
 
 **Your Fact-Checking Process:**
 
