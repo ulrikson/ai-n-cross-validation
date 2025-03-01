@@ -1,82 +1,82 @@
 {
-  "models": {
-    "claude-3-5-haiku-latest": {
-      "input_price": 0.8,
-      "output_price": 4
-    },
-    "claude-3-5-sonnet-latest": {
-      "input_price": 3,
-      "output_price": 15
-    },
-    "gpt-4o-mini": {
-      "input_price": 0.15,
-      "output_price": 0.6
-    },
-    "gpt-4o": {
-      "input_price": 2.5,
-      "output_price": 10
-    },
-    "gemini-2.0-flash": {
-      "input_price": 0.1,
-      "output_price": 0.4
-    },
-    "gemini-2.0-flash-thinking-exp": {
-      "input_price": 0.1,
-      "output_price": 0.4
-    },
-    "mistral-small-latest": {
-      "input_price": 0,
-      "output_price": 0
-    },
-    "mistral-large-latest": {
-      "input_price": 2,
-      "output_price": 6
-    }
-  },
-  "performance_modes": {
-    "fast": {
-      "gemini": {
-        "provider": "gemini",
-        "model": "gemini-2.0-flash"
-      },
-      "openai": {
-        "provider": "openai",
-        "model": "gpt-4o-mini"
-      },
-      "claude": {
-        "provider": "claude",
-        "model": "claude-3-5-haiku-latest"
-      },
-      "mistral": {
-        "provider": "mistral",
-        "model": "mistral-small-latest"
-      }
-    },
-    "comprehensive": {
-      "gemini": {
-        "provider": "gemini",
-        "model": "gemini-2.0-flash-thinking-exp"
-      },
-      "openai": {
-        "provider": "openai",
-        "model": "gpt-4o"
-      },
-      "claude": {
-        "provider": "claude",
-        "model": "claude-3-5-sonnet-latest"
-      },
-      "mistral": {
-        "provider": "mistral",
-        "model": "mistral-large-latest"
-      }
-    }
-  },
-  "prompts": {
-    "validation": "I asked this question to my friend: \"{original_question}\" and received this answer: \"{previous_answer}\". Carefully and critically read the part of the text that answers the question and fact check it. Ignore the rest of the text. Return the original text with your annotations and comments in markdown format. Use the same language as the original text.",
-    "summarize": "You've been given a discussion between a fact checker and a research assistant. The original question was: \"{original_question}\". The discussion has been: \"{discussion}\". Distill the discussion into a single answer to the question. Elaborate on any points that are not clear. Use the same language as the original text. Return the answer in markdown format."
-  },
-  "system_prompts": {
-    "validation": "You are an experienced fact checker. You've worked for esteemed publications like The New Yorker and The Economist. You follow their best practices for fact checking.",
-    "default": "You are a research assistant."
-  }
+	"models": {
+		"claude-3-5-haiku-latest": {
+			"input_price": 0.8,
+			"output_price": 4
+		},
+		"claude-3-5-sonnet-latest": {
+			"input_price": 3,
+			"output_price": 15
+		},
+		"gpt-4o-mini": {
+			"input_price": 0.15,
+			"output_price": 0.6
+		},
+		"gpt-4o": {
+			"input_price": 2.5,
+			"output_price": 10
+		},
+		"gemini-2.0-flash": {
+			"input_price": 0.1,
+			"output_price": 0.4
+		},
+		"gemini-2.0-flash-thinking-exp": {
+			"input_price": 0.1,
+			"output_price": 0.4
+		},
+		"mistral-small-latest": {
+			"input_price": 0,
+			"output_price": 0
+		},
+		"mistral-large-latest": {
+			"input_price": 2,
+			"output_price": 6
+		}
+	},
+	"performance_modes": {
+		"fast": {
+			"gemini": {
+				"provider": "gemini",
+				"model": "gemini-2.0-flash"
+			},
+			"openai": {
+				"provider": "openai",
+				"model": "gpt-4o-mini"
+			},
+			"claude": {
+				"provider": "claude",
+				"model": "claude-3-5-haiku-latest"
+			},
+			"mistral": {
+				"provider": "mistral",
+				"model": "mistral-small-latest"
+			}
+		},
+		"comprehensive": {
+			"gemini": {
+				"provider": "gemini",
+				"model": "gemini-2.0-flash-thinking-exp"
+			},
+			"openai": {
+				"provider": "openai",
+				"model": "gpt-4o"
+			},
+			"claude": {
+				"provider": "claude",
+				"model": "claude-3-5-sonnet-latest"
+			},
+			"mistral": {
+				"provider": "mistral",
+				"model": "mistral-large-latest"
+			}
+		}
+	},
+	"prompts": {
+		"validation": "TASK I asked this question to my friend: \"{original_question}\" and received this answer: \"{previous_answer}\". Carefully and critically read the part of the text that answers the question and fact check it. Ignore the rest of the text. Return the original text with your annotations and comments in markdown format. Use the same language as the original text.",
+		"summarize": "TASK You've been given a discussion between a fact checker and a research assistant. The original question was: \"{original_question}\". The discussion has been: \"{discussion}\". Distill the discussion into a single answer to the question. Elaborate on any points that are not clear. Use the same language as the original text. Return the answer in markdown format."
+	},
+	"system_prompts": {
+		"validation": "SYSTEM You are an experienced fact checker. You've worked for esteemed publications like The New Yorker and The Economist. You follow their best practices for fact checking.",
+		"default": "SYSTEM You are a highly capable, thoughtful, and precise assistant. Your goal is to deeply understand the user's intent, think step-by-step through complex problems, provide clear and accurate answers, and proactively anticipate helpful follow-up information. Always prioritize being truthful, nuanced, insightful, and efficient, tailoring your responses specifically to the user's needs and preferences. "
+	}
 }
