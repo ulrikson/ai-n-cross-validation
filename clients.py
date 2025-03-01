@@ -3,7 +3,7 @@ from typing import Any, List, Dict, Callable
 from enum import Enum, auto
 from dotenv import load_dotenv
 from models import create_llm_response, LLMResponseDict, ValidationResultDict
-from config.pricing_config import get_pricing
+from config import get_pricing
 
 # Import client libraries
 import anthropic
@@ -57,10 +57,10 @@ def create_client(provider: str):
         "mistral": create_mistral_client,
         "gemini": create_gemini_client,
     }
-
+    
     if provider not in clients:
         raise ValueError(f"Unknown provider: {provider}")
-
+    
     return clients[provider]()
 
 
@@ -114,8 +114,8 @@ def create_claude_client():
 
     def calculate_costs(response: Any) -> float:
         pricing = get_pricing(model)
-        input_cost = response.usage.input_tokens * pricing.input_price
-        output_cost = response.usage.output_tokens * pricing.output_price
+        input_cost = response.usage.input_tokens * pricing["input_price"]
+        output_cost = response.usage.output_tokens * pricing["output_price"]
         return input_cost + output_cost
 
     return {
@@ -151,8 +151,8 @@ def create_openai_client():
 
     def calculate_costs(response: Any) -> float:
         pricing = get_pricing(model)
-        input_cost = response.usage.prompt_tokens * pricing.input_price
-        output_cost = response.usage.completion_tokens * pricing.output_price
+        input_cost = response.usage.prompt_tokens * pricing["input_price"]
+        output_cost = response.usage.completion_tokens * pricing["output_price"]
         return input_cost + output_cost
 
     return {
@@ -191,7 +191,7 @@ def create_mistral_client():
         pricing = get_pricing(model)
         input_tokens = response.usage.prompt_tokens
         output_tokens = response.usage.completion_tokens
-        return pricing.input_price * input_tokens + pricing.output_price * output_tokens
+        return pricing["input_price"] * input_tokens + pricing["output_price"] * output_tokens
 
     return {
         "ask_question": ask_question,
@@ -224,9 +224,9 @@ def create_gemini_client():
 
     def calculate_costs(response: Any) -> float:
         pricing = get_pricing(model)
-        input_cost = response.usage_metadata.prompt_token_count * pricing.input_price
+        input_cost = response.usage_metadata.prompt_token_count * pricing["input_price"]
         output_cost = (
-            response.usage_metadata.candidates_token_count * pricing.output_price
+            response.usage_metadata.candidates_token_count * pricing["output_price"]
         )
         return input_cost + output_cost
 

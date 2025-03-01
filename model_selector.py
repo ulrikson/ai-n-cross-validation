@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List, Dict, Any
 from clients import create_client
+from config import get_performance_mode_config
 
 
 class PerformanceMode(Enum):
@@ -9,20 +10,6 @@ class PerformanceMode(Enum):
 
 
 class ModelSelector:
-    _FAST_MODELS = {
-        "gemini": {"provider": "gemini", "model": "gemini-2.0-flash"},
-        "openai": {"provider": "openai", "model": "gpt-4o-mini"},
-        "claude": {"provider": "claude", "model": "claude-3-5-haiku-latest"},
-        "mistral": {"provider": "mistral", "model": "mistral-small-latest"},
-    }
-
-    _COMPREHENSIVE_MODELS = {
-        "gemini": {"provider": "gemini", "model": "gemini-2.0-flash-thinking-exp"},
-        "openai": {"provider": "openai", "model": "gpt-4o"},
-        "claude": {"provider": "claude", "model": "claude-3-5-sonnet-latest"},
-        "mistral": {"provider": "mistral", "model": "mistral-large-latest"},
-    }
-
     @staticmethod
     def get_performance_mode() -> PerformanceMode:
         while True:
@@ -33,11 +20,8 @@ class ModelSelector:
             print("Invalid choice. Please enter 'f' for fast or 'c' for comprehensive.")
 
     def select_models(self, mode: PerformanceMode) -> List[Dict[str, Any]]:
-        model_configs = (
-            self._FAST_MODELS
-            if mode == PerformanceMode.FAST
-            else self._COMPREHENSIVE_MODELS
-        )
+        mode_name = "fast" if mode == PerformanceMode.FAST else "comprehensive"
+        model_configs = get_performance_mode_config(mode_name)
 
         clients = []
         for config in model_configs.values():
