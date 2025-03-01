@@ -8,6 +8,10 @@
 			"input_price": 3,
 			"output_price": 15
 		},
+		"claude-3-7-sonnet-latest": {
+			"input_price": 3,
+			"output_price": 15
+		},
 		"gpt-4o-mini": {
 			"input_price": 0.15,
 			"output_price": 0.6
@@ -15,6 +19,10 @@
 		"gpt-4o": {
 			"input_price": 2.5,
 			"output_price": 10
+		},
+		"gpt-4.5": {
+			"input_price": 75,
+			"output_price": 150
 		},
 		"gemini-2.0-flash": {
 			"input_price": 0.1,
@@ -35,13 +43,13 @@
 	},
 	"performance_modes": {
 		"fast": {
-			"gemini": {
-				"provider": "gemini",
-				"model": "gemini-2.0-flash"
-			},
 			"openai": {
 				"provider": "openai",
 				"model": "gpt-4o-mini"
+			},
+			"gemini": {
+				"provider": "gemini",
+				"model": "gemini-2.0-flash"
 			},
 			"claude": {
 				"provider": "claude",
@@ -53,17 +61,35 @@
 			}
 		},
 		"comprehensive": {
-			"gemini": {
-				"provider": "gemini",
-				"model": "gemini-2.0-flash-thinking-exp"
-			},
 			"openai": {
 				"provider": "openai",
 				"model": "gpt-4o"
 			},
+			"gemini": {
+				"provider": "gemini",
+				"model": "gemini-2.0-flash-thinking-exp"
+			},
 			"claude": {
 				"provider": "claude",
-				"model": "claude-3-5-sonnet-latest"
+				"model": "claude-3-7-sonnet-latest"
+			},
+			"mistral": {
+				"provider": "mistral",
+				"model": "mistral-large-latest"
+			}
+		},
+		"max": {
+			"openai": {
+				"provider": "openai",
+				"model": "gpt-4.5"
+			},
+			"gemini": {
+				"provider": "gemini",
+				"model": "gemini-2.0-flash-thinking-exp"
+			},
+			"claude": {
+				"provider": "claude",
+				"model": "claude-3-7-sonnet-latest"
 			},
 			"mistral": {
 				"provider": "mistral",

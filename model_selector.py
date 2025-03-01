@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Optional
+from typing import List
 from clients import create_client, BaseLLMClient
 from config import get_performance_mode_config
 
@@ -7,6 +7,7 @@ from config import get_performance_mode_config
 class PerformanceMode(Enum):
     FAST = "fast"
     COMPREHENSIVE = "comprehensive"
+    MAX = "max"
 
 
 class ModelSelector:
@@ -19,6 +20,8 @@ class ModelSelector:
             return PerformanceMode.FAST
         elif mode == "comprehensive" or mode == "c":
             return PerformanceMode.COMPREHENSIVE
+        elif mode == "max" or mode == "m":
+            return PerformanceMode.MAX
         else:
             print(f"Invalid mode '{mode_arg}'. Using 'fast' mode.")
             return PerformanceMode.FAST
