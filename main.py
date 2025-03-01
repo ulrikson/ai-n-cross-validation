@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from model_selector import ModelSelector
 from models import ValidationResultDict
-from typing import List
+from typing import List, Tuple
 import time
 import sys
 from utils import (
@@ -14,7 +14,7 @@ from validator import validate_with_models
 load_dotenv()
 
 
-def main():
+def main() -> None:
     """Cross-validate an answer across multiple LLMs and print markdown output."""
     try:
         # Parse command-line arguments
@@ -25,15 +25,12 @@ def main():
         raise SystemExit(1)
 
 
-def parse_command_args():
-    """Parse command-line arguments for mode and input method.
+def parse_command_args() -> Tuple[str, str]:
+    """Parse command-line arguments for mode and input method."""
 
-    Returns:
-        Tuple of (mode, input_method)
-    """
     # Default values
-    mode = None
-    input_method = None
+    mode = "fast"
+    input_method = "write"
 
     # Get arguments if they exist
     if len(sys.argv) > 1:
@@ -44,7 +41,7 @@ def parse_command_args():
     return mode, input_method
 
 
-def run_validation_process(mode_arg=None, input_method_arg=None) -> None:
+def run_validation_process(mode_arg: str, input_method_arg: str) -> None:
     """Run the validation process with selected models."""
     # Get user's performance preference
     selector = ModelSelector()

@@ -22,13 +22,13 @@ def print_markdown(markdown_text: str) -> None:
     console.print(Markdown(markdown_text))
 
 
-def get_question(input_method: Optional[str] = None) -> str:
+def get_question(input_method: str) -> str:
     """Get the question from the user via console or file.
 
     Args:
         input_method: 'write' or 'file', defaults to 'write' if None
     """
-    method = input_method.lower() if input_method else "write"
+    method = input_method.lower()
 
     if method not in ["write", "w", "file", "f"]:
         print(f"Invalid input method '{input_method}'. Using 'write' method.")

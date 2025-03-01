@@ -11,10 +11,8 @@ class PerformanceMode(Enum):
 
 class ModelSelector:
     @staticmethod
-    def get_performance_mode(mode_arg: Optional[str] = None) -> PerformanceMode:
+    def get_performance_mode(mode_arg: str) -> PerformanceMode:
         """Get performance mode from argument or use default."""
-        if mode_arg is None:
-            return PerformanceMode.FAST
 
         mode = mode_arg.lower()
         if mode == "fast" or mode == "f":
