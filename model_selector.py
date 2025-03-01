@@ -1,6 +1,6 @@
 from enum import Enum
-from typing import List, Dict, Any
-from clients import create_client
+from typing import List
+from clients import create_client, BaseLLMClient
 from config import get_performance_mode_config
 
 
@@ -19,7 +19,7 @@ class ModelSelector:
 
             print("Invalid choice. Please enter 'f' for fast or 'c' for comprehensive.")
 
-    def select_models(self, mode: PerformanceMode) -> List[Dict[str, Any]]:
+    def select_models(self, mode: PerformanceMode) -> List[BaseLLMClient]:
         mode_name = "fast" if mode == PerformanceMode.FAST else "comprehensive"
         model_configs = get_performance_mode_config(mode_name)
 

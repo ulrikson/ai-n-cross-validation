@@ -1,10 +1,11 @@
-from typing import List, Dict, Any
+from typing import List
 from models import create_validation_result, ValidationResultDict
 from utils import save_results_to_file
+from clients import BaseLLMClient
 
 
 def validate_with_models(
-    clients: List[Dict[str, Any]], question: str
+    clients: List[BaseLLMClient], question: str
 ) -> List[ValidationResultDict]:
     """Validate an answer across multiple LLMs."""
     results = []
@@ -17,16 +18,16 @@ def validate_with_models(
 
         try:
             if initial_question:
-                response = client["ask_question"](question)
+                response = client.ask_question(question)
             elif last_question:
-                response = client["summarize_answer"](results)
+                response = client.summarize_answer(results)
             else:
-                response = client["validate_answer"](question, previous_answer)
+                response = client.validate_answer(question, previous_answer)
 
-            cost = client["calculate_costs"](response["raw_response"])
+            cost = client.calculate_costs(response["raw_response"])
             result = create_validation_result(
                 question=question,
-                model_name=client["name"],
+                model_name=client.name,
                 answer=response["text"],
                 cost=cost,
             )
@@ -34,7 +35,7 @@ def validate_with_models(
             previous_answer = response["text"]
 
         except Exception as e:
-            print(f"Error with {client['name']}: {str(e)}. Continuing to next model.")
+            print(f"Error with {client.name}: {str(e)}. Continuing to next model.")
 
     save_results_to_file(results)
     return results
