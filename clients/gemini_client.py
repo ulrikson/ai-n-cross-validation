@@ -1,8 +1,9 @@
 import os
-from typing import Any
+from typing import Any, Dict
 from google import genai
 from google.genai import types
-from .base_client import LLMClient, LLMResponse, PromptType
+from .base_client import LLMClient, PromptType
+from models import create_llm_response, LLMResponseDict
 from dotenv import load_dotenv
 from config.pricing_config import get_pricing
 
@@ -15,7 +16,7 @@ class GeminiClient(LLMClient):
 
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
-    ) -> LLMResponse:
+    ) -> LLMResponseDict:
         print(f"{self.MODEL} is thinking...")
         response = self.client.models.generate_content(
             model=self.MODEL,
@@ -24,7 +25,7 @@ class GeminiClient(LLMClient):
                 system_instruction=self._PROMPTS[prompt_type]
             ),
         )
-        return LLMResponse(text=response.text, raw_response=response)
+        return create_llm_response(text=response.text, raw_response=response)
 
     def calculate_costs(self, response: Any) -> float:
         pricing = get_pricing(self.MODEL)
@@ -42,5 +43,5 @@ if __name__ == "__main__":
     load_dotenv()
     client = GeminiClient()
     response = client.ask_question("What is the capital of France?")
-    print(response.text)
-    print(client.calculate_costs(response.raw_response))
+    print(response["text"])
+    print(client.calculate_costs(response["raw_response"]))

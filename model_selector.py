@@ -5,7 +5,7 @@ from clients.claude_client import ClaudeClient
 from clients.mistral_client import MistralClient
 from clients.openai_client import OpenAIClient
 from clients.gemini_client import GeminiClient
-from models.model_config import ModelConfig
+from models import create_model_config
 
 
 class PerformanceMode(Enum):
@@ -15,17 +15,17 @@ class PerformanceMode(Enum):
 
 class ModelSelector:
     _FAST_MODELS = {
-        "gemini": ModelConfig(GeminiClient, "gemini-2.0-flash"),
-        "openai": ModelConfig(OpenAIClient, "gpt-4o-mini"),
-        "claude": ModelConfig(ClaudeClient, "claude-3-5-haiku-latest"),
-        "mistral": ModelConfig(MistralClient, "mistral-small-latest"),
+        "gemini": create_model_config(GeminiClient, "gemini-2.0-flash"),
+        "openai": create_model_config(OpenAIClient, "gpt-4o-mini"),
+        "claude": create_model_config(ClaudeClient, "claude-3-5-haiku-latest"),
+        "mistral": create_model_config(MistralClient, "mistral-small-latest"),
     }
 
     _COMPREHENSIVE_MODELS = {
-        "gemini": ModelConfig(GeminiClient, "gemini-2.0-flash-thinking-exp"),
-        "openai": ModelConfig(OpenAIClient, "gpt-4o"),
-        "claude": ModelConfig(ClaudeClient, "claude-3-5-sonnet-latest"),
-        "mistral": ModelConfig(MistralClient, "mistral-large-latest"),
+        "gemini": create_model_config(GeminiClient, "gemini-2.0-flash-thinking-exp"),
+        "openai": create_model_config(OpenAIClient, "gpt-4o"),
+        "claude": create_model_config(ClaudeClient, "claude-3-5-sonnet-latest"),
+        "mistral": create_model_config(MistralClient, "mistral-large-latest"),
     }
 
     @staticmethod
@@ -46,8 +46,8 @@ class ModelSelector:
 
         clients = []
         for config in model_configs.values():
-            client = config.client_class()
-            client.MODEL = config.model_name
+            client = config["client_class"]()
+            client.MODEL = config["model_name"]
             clients.append(client)
 
         return clients

@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, List
 from enum import Enum, auto
-from models.llm_response import LLMResponse
-from models.validation_result import ValidationResult
+from models import LLMResponseDict, ValidationResultDict
 
 
 class PromptType(Enum):
@@ -46,22 +45,24 @@ class LLMClient(ABC):
     @abstractmethod
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
-    ) -> LLMResponse:
+    ) -> LLMResponseDict:
         pass
 
     def validate_answer(
         self, original_question: str, previous_answer: str
-    ) -> LLMResponse:
+    ) -> LLMResponseDict:
         prompt = self._VALIDATION_PROMPT.format(
             original_question=original_question, previous_answer=previous_answer
         )
         return self.ask_question(prompt, PromptType.VALIDATION)
 
-    def summarize_answer(self, discussion: List[ValidationResult]) -> LLMResponse:
-        question = discussion[0].question
+    def summarize_answer(
+        self, discussion: List[ValidationResultDict]
+    ) -> LLMResponseDict:
+        question = discussion[0]["question"]
         full_discussion = "\n\n".join(
             [
-                f"Question: {result.question}\nAnswer: {result.answer}"
+                f"Question: {result['question']}\nAnswer: {result['answer']}"
                 for result in discussion
             ]
         )

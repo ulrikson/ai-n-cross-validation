@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 from clients.base_client import LLMClient
-from models.validation_result import ValidationResult
+from models import create_validation_result, ValidationResultDict
 from io import TextIOWrapper
 
 
@@ -15,22 +15,22 @@ class CrossValidator:
         """Ensure the output directory exists."""
         os.makedirs("outputs", exist_ok=True)
 
-    def _save_to_file(self, results: List[ValidationResult]):
+    def _save_to_file(self, results: List[ValidationResultDict]):
         """Save the results to a file."""
         filename = f"outputs/validation_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
 
         with open(filename, "w") as file:
             self._write_to_file(file, results)
 
-    def _write_to_file(self, file: TextIOWrapper, results: List[ValidationResult]):
+    def _write_to_file(self, file: TextIOWrapper, results: List[ValidationResultDict]):
         """Write the results to a file."""
-        file.write(f"Question: {results[0].question}\n\n")
+        file.write(f"Question: {results[0]['question']}\n\n")
         for result in results:
-            file.write(f"Model: {result.model_name}\n")
-            file.write(f"Timestamp: {result.timestamp}\n")
-            file.write(f"Answer:\n{result.answer}\n\n")
+            file.write(f"Model: {result['model_name']}\n")
+            file.write(f"Timestamp: {result['timestamp']}\n")
+            file.write(f"Answer:\n{result['answer']}\n\n")
 
-    def validate(self, question: str) -> List[ValidationResult]:
+    def validate(self, question: str) -> List[ValidationResultDict]:
         """Validate an answer across multiple LLMs."""
         results = []
         previous_answer = None
@@ -48,15 +48,15 @@ class CrossValidator:
                 else:
                     response = client.validate_answer(question, previous_answer)
 
-                cost = client.calculate_costs(response.raw_response)
-                result = ValidationResult(
+                cost = client.calculate_costs(response["raw_response"])
+                result = create_validation_result(
                     question=question,
                     model_name=client.__class__.__name__,
-                    answer=response.text,
+                    answer=response["text"],
                     cost=cost,
                 )
                 results.append(result)
-                previous_answer = response.text
+                previous_answer = response["text"]
 
             except Exception as e:
                 self._handle_error(client, e)

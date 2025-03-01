@@ -1,9 +1,10 @@
 import os
 from openai import OpenAI
-from .base_client import LLMClient, LLMResponse, PromptType
+from .base_client import LLMClient, PromptType
 from typing import Any
 from dotenv import load_dotenv
 from config.pricing_config import get_pricing
+from models import create_llm_response, LLMResponseDict
 
 
 class OpenAIClient(LLMClient):
@@ -14,7 +15,7 @@ class OpenAIClient(LLMClient):
 
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
-    ) -> LLMResponse:
+    ) -> LLMResponseDict:
         print(f"{self.MODEL} is thinking...")
         completion = self.client.chat.completions.create(
             model=self.MODEL,
@@ -23,7 +24,7 @@ class OpenAIClient(LLMClient):
                 {"role": "user", "content": question},
             ],
         )
-        return LLMResponse(
+        return create_llm_response(
             text=completion.choices[0].message.content, raw_response=completion
         )
 
@@ -41,4 +42,4 @@ if __name__ == "__main__":
     load_dotenv()
     client = OpenAIClient()
     response = client.ask_question("What is the capital of France?")
-    print(response.text)
+    print(response["text"])

@@ -1,9 +1,10 @@
 import os
 import anthropic
-from .base_client import LLMClient, LLMResponse, PromptType
+from .base_client import LLMClient, PromptType
 from typing import Any
 from dotenv import load_dotenv
 from config.pricing_config import get_pricing
+from models import create_llm_response, LLMResponseDict
 
 
 class ClaudeClient(LLMClient):
@@ -14,7 +15,7 @@ class ClaudeClient(LLMClient):
 
     def ask_question(
         self, question: str, prompt_type: PromptType = PromptType.DEFAULT
-    ) -> LLMResponse:
+    ) -> LLMResponseDict:
         print(f"{self.MODEL} is thinking...")
         response = self.client.messages.create(
             model=self.MODEL,
@@ -24,7 +25,7 @@ class ClaudeClient(LLMClient):
                 {"role": "user", "content": question},
             ],
         )
-        return LLMResponse(text=response.content[0].text, raw_response=response)
+        return create_llm_response(text=response.content[0].text, raw_response=response)
 
     def calculate_costs(self, response: Any) -> float:
         pricing = get_pricing(self.MODEL)
@@ -40,5 +41,5 @@ if __name__ == "__main__":
     load_dotenv()
     client = ClaudeClient()
     response = client.ask_question("What is the capital of France?")
-    print(response.text)
-    print(client.calculate_costs(response.raw_response))
+    print(response["text"])
+    print(client.calculate_costs(response["raw_response"]))
