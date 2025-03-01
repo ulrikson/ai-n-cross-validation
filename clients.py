@@ -3,7 +3,7 @@ from typing import Any, List, Dict, Callable
 from enum import Enum, auto
 from dotenv import load_dotenv
 from models import create_llm_response, LLMResponseDict, ValidationResultDict
-from config import get_pricing
+from config import get_pricing, get_prompt_template, get_system_prompt
 
 # Import client libraries
 import anthropic
@@ -17,35 +17,6 @@ class PromptType(Enum):
     DEFAULT = auto()
     VALIDATION = auto()
     SUMMARIZE = auto()
-
-
-# Common prompt templates and system prompts
-VALIDATION_PROMPT = (
-    'I asked this question to my friend: "{original_question}" and received this answer: "{previous_answer}". '
-    "Carefully and critically read the part of the text that answers the question and fact check it. "
-    "Ignore the rest of the text."
-    "Return the original text with your annotations and comments in markdown format."
-    "Use the same language as the original text."
-)
-
-SUMMARIZE_PROMPT = (
-    "You've been given a discussion between a fact checker and a research assistant. "
-    'The original question was: "{original_question}". '
-    'The discussion has been: "{discussion}". '
-    "Distill the discussion into a single answer to the question."
-    "Elaborate on any points that are not clear."
-    "Use the same language as the original text."
-    "Return the answer in markdown format."
-)
-
-SYSTEM_PROMPTS = {
-    PromptType.VALIDATION: (
-        "You are an experienced fact checker. "
-        "You've worked for esteemed publications like The New Yorker and The Economist."
-        "You follow their best practices for fact checking."
-    ),
-    PromptType.DEFAULT: "You are a research assistant.",
-}
 
 
 # Client factory function
@@ -69,7 +40,7 @@ def validate_answer(
     ask_fn: Callable, original_question: str, previous_answer: str
 ) -> LLMResponseDict:
     """Validate an answer using the specified ask function."""
-    prompt = VALIDATION_PROMPT.format(
+    prompt = get_prompt_template("validation").format(
         original_question=original_question, previous_answer=previous_answer
     )
     return ask_fn(prompt, PromptType.VALIDATION)
@@ -86,7 +57,7 @@ def summarize_answer(
             for result in discussion
         ]
     )
-    prompt = SUMMARIZE_PROMPT.format(
+    prompt = get_prompt_template("summarize").format(
         original_question=question, discussion=full_discussion
     )
     return ask_fn(prompt, PromptType.DEFAULT)
@@ -102,10 +73,11 @@ def create_claude_client():
         question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponseDict:
         print(f"{model} is thinking...")
+        system_prompt = get_system_prompt("default" if prompt_type == PromptType.DEFAULT else "validation")
         response = client.messages.create(
             model=model,
             max_tokens=1024,
-            system=SYSTEM_PROMPTS[prompt_type],
+            system=system_prompt,
             messages=[
                 {"role": "user", "content": question},
             ],
@@ -138,10 +110,11 @@ def create_openai_client():
         question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponseDict:
         print(f"{model} is thinking...")
+        system_prompt = get_system_prompt("default" if prompt_type == PromptType.DEFAULT else "validation")
         completion = client.chat.completions.create(
             model=model,
             messages=[
-                {"role": "system", "content": SYSTEM_PROMPTS[prompt_type]},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": question},
             ],
         )
@@ -175,10 +148,11 @@ def create_mistral_client():
         question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponseDict:
         print(f"{model} is thinking...")
+        system_prompt = get_system_prompt("default" if prompt_type == PromptType.DEFAULT else "validation")
         completion = client.chat.complete(
             model=model,
             messages=[
-                {"role": "system", "content": SYSTEM_PROMPTS[prompt_type]},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": question},
             ],
         )
@@ -213,11 +187,12 @@ def create_gemini_client():
         question: str, prompt_type: PromptType = PromptType.DEFAULT
     ) -> LLMResponseDict:
         print(f"{model} is thinking...")
+        system_prompt = get_system_prompt("default" if prompt_type == PromptType.DEFAULT else "validation")
         response = client.models.generate_content(
             model=model,
             contents=question,
             config=types.GenerateContentConfig(
-                system_instruction=SYSTEM_PROMPTS[prompt_type]
+                system_instruction=system_prompt
             ),
         )
         return create_llm_response(text=response.text, raw_response=response)
