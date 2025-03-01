@@ -76,3 +76,5 @@ def save_results_to_file(results: List[Dict]):
             file.write(f"Timestamp: {result['timestamp']}\n")
             file.write(f"### Answer:\n{result['answer']}\n\n")
             file.write(f"---\n")
+
+    print(f"Results saved to: {os.path.abspath(filename)}")
