@@ -7,7 +7,7 @@ from typing import Dict, List
 
 # Currency conversion
 EXCHANGE_RATES = {
-    "SEK": 10.83,  # Last updated 2025-02-13
+    "SEK": 10.76,  # Last updated 2025-03-01
 }
 
 
