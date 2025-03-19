@@ -70,7 +70,8 @@ def save_results_to_file(results: List[Dict]):
     filename = f"outputs/validation_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
 
     with open(filename, "w") as file:
-        file.write(f"# Question: {results[0]['question']}\n\n")
+        file.write(f"# Question: \n")
+        file.write(f"{results[0]['question']}\n\n")
         for result in results:
             file.write(f"## Model: {result['model_name']}\n")
             file.write(f"Timestamp: {result['timestamp']}\n")
