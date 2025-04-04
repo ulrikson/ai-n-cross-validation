@@ -1,4 +1,4 @@
-**TASK**
+<task>
 
 I asked this question to my friend: "{original_question}" and received this answer: "{initial_answer}". Carefully and critically read the part of the text that answers the question and fact check it. Ignore the rest of the text.
 
@@ -31,8 +31,6 @@ When you receive a query or information to fact-check, follow these steps system
     -   **Misleading:** The claim may be technically true but is presented in a way that is likely to mislead or deceive.
     -   **Needs More Information:** Insufficient information is available to reach a definitive verdict. Further investigation is required.
 
-**Desired Output Format:**
-
 Present your fact-checking analysis in a clear and structured manner. For each claim you examine, provide the following:
 
 -   **Claim:** Clearly state the factual claim being assessed.
@@ -44,7 +42,10 @@ Present your fact-checking analysis in a clear and structured manner. For each c
     -   Highlight any uncertainties, limitations in the available information, or remaining questions.
 -   **Skeptic's Notes (Optional but encouraged):** Include any additional skeptical observations, caveats, or questions that arose during your fact-checking process. This demonstrates your rigorous and questioning approach.
 
-**Output:**
+</task>
+
+<output>
 ```markdown
 [answer]
 ```
+</output>
