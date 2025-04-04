@@ -1,24 +1,17 @@
 # AI Cross Validator
 
-AI Cross Validator is a project that leverages multiple AI models to answer questions. By cross validating responses from several large language models (LLMs) like Claude, OpenAI's GPT, Gemini, and Mistral, the project aims to provide more reliable and robust answers that are less likely to be incorrect.
+## My Goal
+My goal for this project is to see how different LLMs can work together to reduce hallucinations.
 
-## Overview
+The main idea is simple. Instead of relying on one AI's answer, we ask multiple AIs the same question. Then, we compare their answers. 
 
-The core idea behind this project is simple: instead of relying on a single AI's response, we ask multiple AIs the same question and then compare or validate their answers. At any point, one model (as specified by the user) answers the question, while two other models fact-check the response, and a fourth model summarizes the findings. This approach can help mitigate individual model biases or errors, giving you increased confidence in the final answer.
+One model, chosen by the user, will answer the question. Meanwhile, two other models will fact-check the response. A fourth model will summarize the findings. 
 
-## Key Benefits
+This approach (hopefully) reduces the biases or errors of individual models.
 
-- **Improved Accuracy**: By validating responses across multiple AIs, you reduce the risk of an outlier or incorrect answer.
-- **Reduced Bias**: Each model may have its own weaknesses; cross validation helps balance these out.
-- **Transparency**: Get insight on each model's response, including cost details based on token usage.
-- **Flexibility**: Easily integrate additional AI models by extending the common interface.
+## ToDos and Known Issues
 
-## Features
-
-- **Multi-AI Integration**: Supports Claude, OpenAI (GPT-4o), Gemini, and Mistral.
-- **Cross Validation**: One model answers the question, two models fact-check, and a fourth summarizes the findings.
-- **Cost Tracking**: Prints the pricing cost of each call based on tokens consumed.
-- **Modular Design**: Follows SOLID principles and best practices, keeping functions simple and maintainable.
+- [ ] Being able to select what models run in which order
 
 ## Getting Started
 
