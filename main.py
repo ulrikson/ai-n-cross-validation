@@ -8,8 +8,13 @@ from utils import (
     convert_to_sek,
     print_markdown,
     get_question,
+    console,
+    COLORS,
+    print_summary_table
 )
 from validator import validate_with_models
+from rich.panel import Panel
+from rich.text import Text
 
 load_dotenv()
 
@@ -21,13 +26,12 @@ def main() -> None:
         mode_arg = parse_command_args()
         run_validation_process(mode_arg)
     except Exception as e:
-        print(f"Error: {str(e)}")
+        console.print(f"[{COLORS['error']}]Error:[/] {str(e)}")
         raise SystemExit(1)
 
 
 def parse_command_args() -> str:
     """Parse command-line arguments for mode."""
-
     # Default value
     mode = "fast"
 
@@ -47,40 +51,47 @@ def run_validation_process(mode_arg: str) -> None:
 
     start_time = time.time()  # Start time measurement
 
+    # Display performance mode
+    console.print(f"[{COLORS['info']}]Performance mode:[/] [bold]{mode}[/]")
+    
+    # Run validation
     results = validate_with_models(
         clients=selector.select_models(mode),
         question=question,
     )
 
+    # Print final results
     print_final_answer(results)
-    print_markdown("---")
-    print_total_cost(results)
-    print_total_time(start_time)
+    
+    # Print summary statistics
+    total_cost = calculate_total_cost(results)
+    elapsed_time = time.time() - start_time
+    print_summary_table(results, elapsed_time, total_cost)
+    
+    # Print SEK cost
+    sek_amount = convert_to_sek(total_cost)
+    console.print(f"[{COLORS['muted']}]Total cost in SEK: {sek_amount:.3f} SEK[/]")
 
 
 def print_final_answer(results: List[ValidationResultDict]) -> None:
     """Print the final answer from the last LLM."""
     final_result = results[-1]
+    
+    # Display panel with final answer
+    console.rule("[bold cyan]Cross-Validation Result[/]", style="cyan")
+    console.print()
+    
+    # Print the model used for the final answer
+    console.print(f"[{COLORS['info']}]Final answer from:[/] [bold]{final_result['model_name']}[/]")
+    console.print()
+    
+    # Print the answer itself with markdown formatting
     print_markdown(final_result["answer"])
-
-
-def print_total_cost(results: List[ValidationResultDict]) -> None:
-    """Print the total cost in SEK."""
-    total_cost = calculate_total_cost(results)
-    sek_amount = convert_to_sek(total_cost)
-
-    print_markdown(f"**Total cost**: {sek_amount:.3f} SEK")
 
 
 def calculate_total_cost(results: List[ValidationResultDict]) -> float:
     """Calculate the total cost. Costs are per million tokens."""
     return sum(result["cost"] for result in results) / 1000000
-
-
-def print_total_time(start_time: float) -> None:
-    """Print the total time taken for the validation process."""
-    elapsed_time = time.time() - start_time
-    print_markdown(f"**Total time**: {elapsed_time:.2f} seconds")
 
 
 if __name__ == "__main__":
