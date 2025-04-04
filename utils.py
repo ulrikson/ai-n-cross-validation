@@ -22,41 +22,9 @@ def print_markdown(markdown_text: str) -> None:
     console.print(Markdown(markdown_text))
 
 
-def get_question(input_method: str) -> str:
-    """Get the question from the user via console or file.
-
-    Args:
-        input_method: 'write' or 'file', defaults to 'write' if None
-    """
-    method = input_method.lower()
-
-    if method not in ["write", "w", "file", "f"]:
-        print(f"Invalid input method '{input_method}'. Using 'write' method.")
-        method = "write"
-
-    if method in ["write", "w"]:
-        return input("Enter your question: ").strip()
-    elif method in ["file", "f"]:
-        while True:
-            filename = input("Enter the path to your question file: ").strip()
-            file_path = Path(filename)
-
-            if not file_path.exists():
-                print(f"File {filename} does not exist. Please try again.")
-                continue
-
-            try:
-                with open(file_path, "r") as file:
-                    question = file.read().strip()
-                    if not question:
-                        print("File is empty. Please provide a file with content.")
-                        continue
-                    return question
-            except Exception as e:
-                print(f"Error reading file: {str(e)}")
-
-    # This should not be reached, but just in case
-    return get_question("write")
+def get_question() -> str:
+    """Get the question from the user via console."""
+    return input("Enter your question: ").strip()
 
 
 def ensure_output_directory():

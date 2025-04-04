@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from model_selector import ModelSelector
 from models import ValidationResultDict
-from typing import List, Tuple
+from typing import List
 import time
 import sys
 from utils import (
@@ -18,35 +18,32 @@ def main() -> None:
     """Cross-validate an answer across multiple LLMs and print markdown output."""
     try:
         # Parse command-line arguments
-        mode_arg, input_method_arg = parse_command_args()
-        run_validation_process(mode_arg, input_method_arg)
+        mode_arg = parse_command_args()
+        run_validation_process(mode_arg)
     except Exception as e:
         print(f"Error: {str(e)}")
         raise SystemExit(1)
 
 
-def parse_command_args() -> Tuple[str, str]:
-    """Parse command-line arguments for mode and input method."""
+def parse_command_args() -> str:
+    """Parse command-line arguments for mode."""
 
-    # Default values
+    # Default value
     mode = "fast"
-    input_method = "write"
 
-    # Get arguments if they exist
+    # Get argument if it exists
     if len(sys.argv) > 1:
         mode = sys.argv[1]
-    if len(sys.argv) > 2:
-        input_method = sys.argv[2]
 
-    return mode, input_method
+    return mode
 
 
-def run_validation_process(mode_arg: str, input_method_arg: str) -> None:
+def run_validation_process(mode_arg: str) -> None:
     """Run the validation process with selected models."""
     # Get user's performance preference
     selector = ModelSelector()
     mode = selector.get_performance_mode(mode_arg)
-    question = get_question(input_method_arg)
+    question = get_question()
 
     start_time = time.time()  # Start time measurement
 
