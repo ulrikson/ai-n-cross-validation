@@ -1,41 +1,22 @@
-from enum import Enum
-from typing import List
-from clients import create_client, BaseLLMClient
+from typing import Dict
 from config import get_performance_mode_config
 
 
-class PerformanceMode(Enum):
-    FAST = "fast"
-    COMPREHENSIVE = "comprehensive"
-    MAX = "max"
+def get_performance_mode(mode_arg: str) -> str:
+    """Get performance mode from argument or use default."""
+    mode = mode_arg.lower()
+    
+    if mode in ("fast", "f"):
+        return "fast"
+    elif mode in ("comprehensive", "c"):
+        return "comprehensive" 
+    elif mode in ("max", "m"):
+        return "max"
+    else:
+        print(f"Invalid mode '{mode_arg}'. Using 'fast' mode.")
+        return "fast"
 
 
-class ModelSelector:
-    @staticmethod
-    def get_performance_mode(mode_arg: str) -> PerformanceMode:
-        """Get performance mode from argument or use default."""
-
-        mode = mode_arg.lower()
-        if mode == "fast" or mode == "f":
-            return PerformanceMode.FAST
-        elif mode == "comprehensive" or mode == "c":
-            return PerformanceMode.COMPREHENSIVE
-        elif mode == "max" or mode == "m":
-            return PerformanceMode.MAX
-        else:
-            print(f"Invalid mode '{mode_arg}'. Using 'fast' mode.")
-            return PerformanceMode.FAST
-
-    def select_models(self, mode: PerformanceMode) -> List[BaseLLMClient]:
-        """Select models based on performance mode."""
-        model_configs = get_performance_mode_config(mode.value)
-
-        clients = []
-        for config in model_configs.values():
-            client = create_client(
-                provider=config["provider"],
-                model_name=config["model"],
-            )
-            clients.append(client)
-
-        return clients
+def get_model_configs(mode: str) -> Dict[str, Dict[str, str]]:
+    """Get model configurations for the given performance mode."""
+    return get_performance_mode_config(mode)

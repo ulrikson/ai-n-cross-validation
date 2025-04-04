@@ -1,16 +1,28 @@
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, TypedDict
 
 
-# Simple dictionary type definitions
-ModelConfigDict = Dict[str, Any]
-ValidationResultDict = Dict[str, Any]
-LLMResponseDict = Dict[str, Any]
+class ModelConfig(TypedDict):
+    client_type: str
+    model_name: str
 
 
-# Helper functions to create dictionaries
-def create_model_config(client_class: Any, model_name: str) -> ModelConfigDict:
-    return {"client_class": client_class, "model_name": model_name}
+class ValidationResult(TypedDict):
+    question: str
+    model_name: str
+    answer: str
+    cost: float
+    timestamp: datetime
+
+
+class LLMResponse(TypedDict):
+    text: str
+    raw_response: Any
+
+
+def create_model_config(client_type: str, model_name: str) -> ModelConfig:
+    """Create an immutable model configuration."""
+    return {"client_type": client_type, "model_name": model_name}
 
 
 def create_validation_result(
@@ -19,7 +31,8 @@ def create_validation_result(
     answer: str,
     cost: float = 0.0,
     timestamp: Optional[datetime] = None,
-) -> ValidationResultDict:
+) -> ValidationResult:
+    """Create an immutable validation result."""
     return {
         "question": question,
         "model_name": model_name,
@@ -29,5 +42,6 @@ def create_validation_result(
     }
 
 
-def create_llm_response(text: str, raw_response: Any) -> LLMResponseDict:
+def create_llm_response(text: str, raw_response: Any) -> LLMResponse:
+    """Create an immutable LLM response."""
     return {"text": text, "raw_response": raw_response}

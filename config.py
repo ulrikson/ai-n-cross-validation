@@ -1,10 +1,12 @@
 import json
 import os
 from typing import Dict, Any
+from functools import lru_cache
 
 
+@lru_cache(maxsize=1)
 def load_config() -> Dict[str, Any]:
-    """Load the configuration from the JSON file."""
+    """Load the configuration from the JSON file (cached for efficiency)."""
     with open("config.json", "r") as f:
         return json.load(f)
 
@@ -43,8 +45,7 @@ def get_prompt_template(prompt_type: str) -> str:
         raise ValueError(f"Prompt template {prompt_type} not found")
 
     file = prompt_file_map[prompt_type]
-    content = read_prompt_file(file)
-    return content
+    return read_prompt_file(file)
 
 
 def get_system_prompt(prompt_type: str) -> str:

@@ -1,22 +1,17 @@
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
-from rich.spinner import Spinner
-from rich.live import Live
 from rich.table import Table
 from rich.style import Style
 from rich.text import Text
-from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TimeElapsedColumn
 from pathlib import Path
 from datetime import datetime
 import os
-import time
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Callable
+from functools import partial
 
-# Initialize console
 console = Console()
 
-# Color palette
 COLORS = {
     "primary": "cyan",
     "secondary": "green",
@@ -28,7 +23,6 @@ COLORS = {
     "muted": "grey70",
 }
 
-# Model provider colors
 PROVIDER_COLORS = {
     "claude": "purple",
     "openai": "green",
@@ -36,7 +30,6 @@ PROVIDER_COLORS = {
     "mistral": "yellow",
 }
 
-# Currency conversion
 EXCHANGE_RATES = {
     "SEK": 10.76,  # Last updated 2025-03-01
 }
@@ -52,18 +45,23 @@ def print_markdown(markdown_text: str) -> None:
     console.print(Markdown(markdown_text))
 
 
-def get_provider_color(model_name: str) -> str:
-    """Get the color associated with a model's provider."""
+def get_provider_from_model_name(model_name: str) -> str:
+    """Extract provider name from model name."""
     provider = model_name.split("-")[0].lower()
     if "claude" in model_name.lower():
-        provider = "claude"
+        return "claude"
     elif "gpt" in model_name.lower() or "o1" in model_name.lower():
-        provider = "openai"
+        return "openai"
     elif "gemini" in model_name.lower():
-        provider = "gemini"
+        return "gemini"
     elif "mistral" in model_name.lower():
-        provider = "mistral"
-    
+        return "mistral"
+    return provider
+
+
+def get_provider_color(model_name: str) -> str:
+    """Get the color associated with a model's provider."""
+    provider = get_provider_from_model_name(model_name)
     return PROVIDER_COLORS.get(provider, COLORS["primary"])
 
 
@@ -84,12 +82,12 @@ def get_question() -> str:
     return console.input("[bold cyan]Enter your question: [/]").strip()
 
 
-def ensure_output_directory():
+def ensure_output_directory() -> None:
     """Ensure the output directory exists."""
     os.makedirs("outputs", exist_ok=True)
 
 
-def save_results_to_file(results: List[Dict]):
+def save_results_to_file(results: List[Dict[str, Any]]) -> None:
     """Save the validation results to a file."""
     ensure_output_directory()
     filename = f"outputs/validation_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
@@ -106,8 +104,8 @@ def save_results_to_file(results: List[Dict]):
     console.print(f"[{COLORS['info']}]Results saved to:[/] {os.path.abspath(filename)}")
 
 
-def print_summary_table(results: List[Dict], total_time: float, total_cost: float) -> None:
-    """Print a summary table with model information."""
+def create_summary_table(results: List[Dict[str, Any]], total_time: float, total_cost: float) -> Table:
+    """Create a summary table with model information."""
     table = Table(title="Cross-Validation Summary")
     
     table.add_column("Model", style="bold")
@@ -116,16 +114,7 @@ def print_summary_table(results: List[Dict], total_time: float, total_cost: floa
     
     for result in results:
         model_name = result["model_name"]
-        provider = model_name.split("-")[0].lower()
-        if "claude" in model_name.lower():
-            provider = "claude"
-        elif "gpt" in model_name.lower() or "o1" in model_name.lower():
-            provider = "openai"
-        elif "gemini" in model_name.lower():
-            provider = "gemini"
-        elif "mistral" in model_name.lower():
-            provider = "mistral"
-            
+        provider = get_provider_from_model_name(model_name)
         cost = result["cost"] / 1000000  # Convert to dollars
         color = get_provider_color(model_name)
         
@@ -141,6 +130,13 @@ def print_summary_table(results: List[Dict], total_time: float, total_cost: floa
         "",
         f"[bold]${total_cost:.6f}[/]",
     )
+    
+    return table
+
+
+def print_summary_table(results: List[Dict[str, Any]], total_time: float, total_cost: float) -> None:
+    """Print a summary table with model information."""
+    table = create_summary_table(results, total_time, total_cost)
     
     console.print()
     console.print(table)
