@@ -1,9 +1,5 @@
 {
 	"models": {
-		"claude-3-5-haiku-latest": {
-			"input_price": 0.8,
-			"output_price": 4
-		},
 		"claude-3-5-sonnet-latest": {
 			"input_price": 3,
 			"output_price": 15
@@ -20,9 +16,13 @@
 			"input_price": 2.5,
 			"output_price": 10
 		},
-		"gpt-4.5": {
-			"input_price": 75,
-			"output_price": 150
+		"o1": {
+			"input_price": 15,
+			"output_price": 60
+		},
+		"gemini-2.5-pro-exp-03-25": {
+			"input_price": 1.25,
+			"output_price": 10
 		},
 		"gemini-2.0-flash": {
 			"input_price": 0.1,
@@ -53,7 +53,7 @@
 			},
 			"claude": {
 				"provider": "claude",
-				"model": "claude-3-5-haiku-latest"
+				"model": "claude-3-5-sonnet-latest"
 			},
 			"mistral": {
 				"provider": "mistral",
@@ -81,11 +81,11 @@
 		"max": {
 			"openai": {
 				"provider": "openai",
-				"model": "gpt-4.5"
+				"model": "o1"
 			},
 			"gemini": {
 				"provider": "gemini",
-				"model": "gemini-2.0-flash-thinking-exp"
+				"model": "gemini-2.5-pro-exp-03-25"
 			},
 			"claude": {
 				"provider": "claude",
