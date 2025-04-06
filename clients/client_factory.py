@@ -1,6 +1,6 @@
 import os
 from functools import partial
-from client_types import ClientFunctions
+from clients.client_types import ClientFunctions
 
 # Import LLM-specific clients
 import anthropic
@@ -9,10 +9,10 @@ from mistralai import Mistral
 from google import genai
 
 # Import client functions
-from anthropic_client import ask_question_claude, calculate_costs_claude
-from openai_client import ask_question_openai, calculate_costs_openai
-from mistral_client import ask_question_mistral, calculate_costs_mistral
-from gemini_client import ask_question_gemini, calculate_costs_gemini
+from clients.anthropic_client import ask_question_claude, calculate_costs_claude
+from clients.openai_client import ask_question_openai, calculate_costs_openai
+from clients.mistral_client import ask_question_mistral, calculate_costs_mistral
+from clients.gemini_client import ask_question_gemini, calculate_costs_gemini
 
 
 def create_client(provider: str, model_name: str) -> ClientFunctions:

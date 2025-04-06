@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from client_types import PromptType
+from clients.client_types import PromptType
 from models import create_llm_response
 from config import get_system_prompt, get_pricing
 

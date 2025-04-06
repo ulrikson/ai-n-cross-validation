@@ -12,7 +12,7 @@ from utils import (
 )
 from validator import validate_with_models
 from model_selector import get_performance_mode, get_model_configs
-from client_factory import create_client
+from clients.client_factory import create_client
 
 load_dotenv()
 

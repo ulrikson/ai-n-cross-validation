@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Callable
-from client_types import PromptType
+from clients.client_types import PromptType
 from config import get_prompt_template
 
 
