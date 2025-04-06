@@ -99,8 +99,6 @@ def _run_validation_process(mode_arg: str) -> None:
     elapsed_time = time.time() - start_time
     print_summary_table(results, elapsed_time, total_cost)
 
-    _display_cost_in_sek(total_cost)
-
 
 if __name__ == "__main__":
     main()

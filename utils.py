@@ -31,7 +31,7 @@ PROVIDER_COLORS = {
 }
 
 EXCHANGE_RATES = {
-    "SEK": 10.76,  # Last updated 2025-03-01
+    "SEK": 9.99,  # Last updated 2025-04-06
 }
 
 
@@ -111,24 +111,29 @@ def create_summary_table(results: List[Dict[str, Any]], total_time: float, total
     table.add_column("Model", style="bold")
     table.add_column("Provider", style="dim")
     table.add_column("Cost (USD)", justify="right")
+    table.add_column("Cost (SEK)", justify="right")
     
     for result in results:
         model_name = result["model_name"]
         provider = get_provider_from_model_name(model_name)
         cost = result["cost"] / 1000000  # Convert to dollars
+        sek_cost = convert_to_sek(cost)
         color = get_provider_color(model_name)
         
         table.add_row(
             f"[{color}]{model_name}[/]",
             provider,
             f"${cost:.6f}",
+            f"{sek_cost:.5f}",
         )
     
     table.add_section()
+    total_sek = convert_to_sek(total_cost)
     table.add_row(
         "[bold]Total[/]",
         "",
         f"[bold]${total_cost:.6f}[/]",
+        f"[bold]{total_sek:.5f}[/]",
     )
     
     return table
