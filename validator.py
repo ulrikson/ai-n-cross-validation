@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 from models import create_validation_result
 from utils import (
     save_results_to_file,
@@ -34,7 +34,7 @@ def _process_client(
     total_count: int,
     initial_answer: str,
     results: List[Dict[str, Any]],
-) -> Dict[str, Any]:
+) -> Tuple[Dict[str, Any], str]:
     """Process a single client's response."""
     action = _determine_action(index, total_count)
     _display_action_status(client, action)
@@ -44,9 +44,11 @@ def _process_client(
         initial_answer_text = response["text"]
         return response, initial_answer_text
     elif index == total_count - 1:
-        return summarize_answer(client["ask_question"], results)
+        response = summarize_answer(client["ask_question"], results)
+        return response, initial_answer
     else:
-        return validate_answer(client["ask_question"], question, initial_answer)
+        response = validate_answer(client["ask_question"], question, initial_answer)
+        return response, initial_answer
 
 
 def _calculate_and_create_result(
