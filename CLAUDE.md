@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 -   Use functional programming approach (avoid OOP)
 -   Keep files short (under 200 lines)
 -   Methods should have at most 2 parameters (dyadic) unless absolutely necessary
--   Methods should be short. They should do one thing and do it well. Preferably no more than 5 lines per method.
+-   Methods should be short. They should do one thing and do it well. Preferably 2-5 lines per method. Avoid one-line methods that simply wrap other function calls.
 -   Avoid boolean parameters - they often indicate a method doing more than one thing
 -   Follow KISS and YAGNI principles - don't over-engineer
 -   Typing: Always use type hints (from typing import List, Dict, Any, etc.)

@@ -1,7 +1,11 @@
-from dotenv import load_dotenv
-from typing import List, Dict, Any
-import time
 import sys
+import time
+from typing import Dict, List, Any
+
+from dotenv import load_dotenv
+
+from clients.client_factory import create_client
+from model_selector import get_model_configs, get_performance_mode
 from utils import (
     convert_to_sek,
     print_markdown,
@@ -11,8 +15,6 @@ from utils import (
     print_summary_table,
 )
 from validator import validate_with_models
-from model_selector import get_performance_mode, get_model_configs
-from clients.client_factory import create_client
 
 load_dotenv()
 
@@ -20,84 +22,84 @@ load_dotenv()
 def main() -> None:
     """Cross-validate an answer across multiple LLMs and print markdown output."""
     try:
-        # Parse command-line arguments and run validation
-        mode_arg = parse_command_args()
-        run_validation_process(mode_arg)
+        mode_arg = _parse_command_args()
+        _run_validation_process(mode_arg)
     except Exception as e:
         console.print(f"[{COLORS['error']}]Error:[/] {str(e)}")
         raise SystemExit(1)
 
 
-def parse_command_args() -> str:
+def _parse_command_args() -> str:
     """Parse command-line arguments for mode."""
-    # Default value
     mode = "fast"
-
-    # Get argument if it exists
     if len(sys.argv) > 1:
         mode = sys.argv[1]
-
     return mode
 
 
-def run_validation_process(mode_arg: str) -> None:
-    """Run the validation process with selected models."""
-    # Get user's performance preference and question
-    mode = get_performance_mode(mode_arg)
-    question = get_question()
-
-    start_time = time.time()  # Start time measurement
-
-    # Display performance mode
-    console.print(f"[{COLORS['info']}]Performance mode:[/] [bold]{mode}[/]")
-
-    # Get model configurations and create clients
+def _get_clients_from_mode(mode: str) -> List[Any]:
+    """Create client instances based on performance mode."""
     model_configs = get_model_configs(mode)
     clients = [
         create_client(config["provider"], config["model"])
         for config in model_configs.values()
     ]
+    return clients
 
-    # Run validation
-    results = validate_with_models(
-        clients=clients,
-        question=question,
+
+def _display_performance_mode(mode: str) -> None:
+    """Display the current performance mode in the console."""
+    console.print(f"[{COLORS['info']}]Performance mode:[/] [bold]{mode}[/]")
+    console.print()
+
+
+def _print_model_answer(result: Dict[str, Any]) -> None:
+    """Print the model name and its answer with markdown formatting."""
+    console.print(
+        f"[{COLORS['info']}]Final answer from:[/] [bold]{result['model_name']}[/]"
     )
+    console.print()
+    print_markdown(result["answer"])
 
-    # Print final results and summary
-    print_final_answer(results)
 
-    # Calculate and print summary statistics
-    total_cost = calculate_total_cost(results)
-    elapsed_time = time.time() - start_time
-    print_summary_table(results, elapsed_time, total_cost)
+def _display_final_answer(results: List[Dict[str, Any]]) -> None:
+    """Display the final answer with proper styling and formatting."""
+    final_result = results[-1]
+    console.rule("[bold cyan]Cross-Validation Result[/]", style="cyan")
+    console.print()
+    _print_model_answer(final_result)
 
-    # Print SEK cost
-    sek_amount = convert_to_sek(total_cost)
+
+def _calculate_total_cost(results: List[Dict[str, Any]]) -> float:
+    """Calculate the total cost in USD from micropennies."""
+    total = sum(result["cost"] for result in results)
+    return total / 1000000
+
+
+def _display_cost_in_sek(usd_cost: float) -> None:
+    """Convert and display the cost in Swedish Krona."""
+    sek_amount = convert_to_sek(usd_cost)
     console.print(f"[{COLORS['muted']}]Total cost in SEK: {sek_amount:.3f} SEK[/]")
 
 
-def print_final_answer(results: List[Dict[str, Any]]) -> None:
-    """Print the final answer from the last LLM."""
-    final_result = results[-1]
+def _run_validation_process(mode_arg: str) -> None:
+    """Run the complete validation process with timing and results display."""
+    mode = get_performance_mode(mode_arg)
+    question = get_question()
 
-    # Display panel with final answer
-    console.rule("[bold cyan]Cross-Validation Result[/]", style="cyan")
-    console.print()
+    start_time = time.time()
+    _display_performance_mode(mode)
 
-    # Print the model used for the final answer
-    console.print(
-        f"[{COLORS['info']}]Final answer from:[/] [bold]{final_result['model_name']}[/]"
-    )
-    console.print()
+    clients = _get_clients_from_mode(mode)
+    results = validate_with_models(clients=clients, question=question)
 
-    # Print the answer itself with markdown formatting
-    print_markdown(final_result["answer"])
+    _display_final_answer(results)
 
+    total_cost = _calculate_total_cost(results)
+    elapsed_time = time.time() - start_time
+    print_summary_table(results, elapsed_time, total_cost)
 
-def calculate_total_cost(results: List[Dict[str, Any]]) -> float:
-    """Calculate the total cost using a pure functional approach."""
-    return sum(result["cost"] for result in results) / 1000000
+    _display_cost_in_sek(total_cost)
 
 
 if __name__ == "__main__":
