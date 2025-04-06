@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 from models import create_validation_result
 from utils import save_results_to_file, console, COLORS, display_header, get_provider_color
-from clients import validate_answer, summarize_answer
+from validation_helpers import validate_answer, summarize_answer
 
 
 def validate_with_models(

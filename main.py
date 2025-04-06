@@ -8,13 +8,11 @@ from utils import (
     get_question,
     console,
     COLORS,
-    print_summary_table
+    print_summary_table,
 )
 from validator import validate_with_models
-from rich.panel import Panel
-from rich.text import Text
 from model_selector import get_performance_mode, get_model_configs
-from clients import create_client
+from client_factory import create_client
 
 load_dotenv()
 
@@ -52,14 +50,14 @@ def run_validation_process(mode_arg: str) -> None:
 
     # Display performance mode
     console.print(f"[{COLORS['info']}]Performance mode:[/] [bold]{mode}[/]")
-    
+
     # Get model configurations and create clients
     model_configs = get_model_configs(mode)
     clients = [
         create_client(config["provider"], config["model"])
         for config in model_configs.values()
     ]
-    
+
     # Run validation
     results = validate_with_models(
         clients=clients,
@@ -68,12 +66,12 @@ def run_validation_process(mode_arg: str) -> None:
 
     # Print final results and summary
     print_final_answer(results)
-    
+
     # Calculate and print summary statistics
     total_cost = calculate_total_cost(results)
     elapsed_time = time.time() - start_time
     print_summary_table(results, elapsed_time, total_cost)
-    
+
     # Print SEK cost
     sek_amount = convert_to_sek(total_cost)
     console.print(f"[{COLORS['muted']}]Total cost in SEK: {sek_amount:.3f} SEK[/]")
@@ -82,15 +80,17 @@ def run_validation_process(mode_arg: str) -> None:
 def print_final_answer(results: List[Dict[str, Any]]) -> None:
     """Print the final answer from the last LLM."""
     final_result = results[-1]
-    
+
     # Display panel with final answer
     console.rule("[bold cyan]Cross-Validation Result[/]", style="cyan")
     console.print()
-    
+
     # Print the model used for the final answer
-    console.print(f"[{COLORS['info']}]Final answer from:[/] [bold]{final_result['model_name']}[/]")
+    console.print(
+        f"[{COLORS['info']}]Final answer from:[/] [bold]{final_result['model_name']}[/]"
+    )
     console.print()
-    
+
     # Print the answer itself with markdown formatting
     print_markdown(final_result["answer"])
 
